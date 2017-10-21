@@ -2,8 +2,6 @@ import React, { Component } from 'react'
 import DisplayStore from '../data/stores/DisplayStore'
 import AssignmentPreset from './AssignmentPreset'
 
-import { Button } from 'react-materialize'
-
 export default class MainContainer extends Component{
   constructor(props){
     super(props)
@@ -41,7 +39,7 @@ export default class MainContainer extends Component{
 
   render(){
     return(
-      <div id='node-field'>
+      <div id='node-field-container'>
         {this.state.assignment}
       </div>
     )
