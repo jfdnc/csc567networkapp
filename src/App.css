@@ -21,7 +21,6 @@ body{
 }
 .dropdown-content{
   background: var(--blue1);
-  color: green;
 }
 
 /*node field*/
@@ -30,7 +29,7 @@ body{
   flex-direction: column;
 }
 #field-container > .fixed-action-btn {
-  visibility: vis;
+  visibility: hidden;
 }
 #status-box{
   position: absolute;
