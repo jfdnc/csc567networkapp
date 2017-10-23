@@ -1,16 +1,39 @@
 import React from 'react'
 import NetNode from './NetNode'
+import { addNode } from '../action/actions/network_actions'
 
 export default class AssignmentPreset extends React.Component{
   constructor(props){
     super(props)
 
+    this.state = {
+      thisPreset: <h1>default display</h1>
+    }
+
     this.mapNodes = this.mapNodes.bind(this)
+  }
+
+  componentWillReceiveProps(props){
+    switch(props.a){
+      case 'd':
+      this.setState({thisPreset: <h1>default display</h1>})
+      break
+      case '1':
+      this.setState({thisPreset: this.mapNodes(presetOne.nodes)})
+      break
+      case '2':
+      this.setState({thisPreset: this.mapNodes(presetTwo.nodes)})
+      break
+      case '3':
+      this.setState({thisPreset: this.mapNodes(presetThree.nodes)})
+      break
+    }
   }
 
   mapNodes(nodeList){
     return(
       nodeList.map((node, i) =>{
+        addNode(node)
         return(
           <NetNode obj={node} key={node.id}/>
         )
@@ -19,32 +42,7 @@ export default class AssignmentPreset extends React.Component{
   }
 
   render(){
-      switch(this.props.a){
-        case 'd':
-        return <h1>default display</h1>
-        break
-        case '1':
-        return(
-          <div id='node-field'>
-            {this.mapNodes(presetOne.nodes)}
-          </div>
-        )
-        break
-        case '2':
-        return(
-          <div id='node-field'>
-            {this.mapNodes(presetTwo.nodes)}
-          </div>
-        )
-        break
-        case '3':
-        return(
-          <div id='node-field'>
-            {this.mapNodes(presetThree.nodes)}
-          </div>
-        )
-        break
-      }
+    return(this.state.thisPreset)
   }
 }
 

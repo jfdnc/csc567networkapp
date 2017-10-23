@@ -40,7 +40,10 @@ export default class MainContainer extends Component{
   render(){
     return(
       <div id='node-field-container'>
-        {this.state.assignment}
+        <div id='node-field'>
+          {this.state.assignment}
+          {DisplayStore.getCurrAssignment() != 'default' ? this.props.children : ''}
+        </div>
       </div>
     )
   }

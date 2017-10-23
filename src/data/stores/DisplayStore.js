@@ -8,41 +8,41 @@ class DisplayStore extends EventEmitter {
     super(props)
 
     //initial log info
-    this.displayInfo = {
+    this.displayState = {
       assignmentDisplayed: 'default'
     }
   }
 
   displayDefault(){
-    this.displayInfo = {
+    this.displayState = {
       assignmentDisplayed: 'default'
     }
     this.emit("change")
   }
 
   displayA1(){
-    this.displayInfo = {
+    this.displayState = {
       assignmentDisplayed: 'a1'
     }
     this.emit("change")
   }
 
   displayA2(){
-    this.displayInfo = {
+    this.displayState = {
       assignmentDisplayed: 'a2'
     }
     this.emit("change")
   }
 
   displayA3(){
-    this.displayInfo = {
+    this.displayState = {
       assignmentDisplayed: 'a3'
     }
     this.emit("change")
   }
 
   getCurrAssignment(){
-    return this.displayInfo.assignmentDisplayed
+    return this.displayState.assignmentDisplayed
   }
 
 
