@@ -1,6 +1,7 @@
 import React from 'react'
 import NetNode from './NetNode'
-import { addNode } from '../action/actions/network_actions'
+import { addNode, addLink } from '../action/actions/network_actions'
+import LinkLayer from './LinkLayer'
 
 export default class AssignmentPreset extends React.Component{
   constructor(props){
@@ -11,6 +12,7 @@ export default class AssignmentPreset extends React.Component{
     }
 
     this.mapNodes = this.mapNodes.bind(this)
+    this.mapLinks = this.mapLinks.bind(this)
   }
 
   componentWillReceiveProps(props){
@@ -20,12 +22,15 @@ export default class AssignmentPreset extends React.Component{
       break
       case '1':
       this.setState({thisPreset: this.mapNodes(presetOne.nodes)})
+      this.mapLinks(presetOne.links)
       break
       case '2':
       this.setState({thisPreset: this.mapNodes(presetTwo.nodes)})
+      this.mapLinks(presetTwo.links)
       break
       case '3':
       this.setState({thisPreset: this.mapNodes(presetThree.nodes)})
+      this.mapLinks(presetThree.links)
       break
     }
   }
@@ -41,13 +46,18 @@ export default class AssignmentPreset extends React.Component{
     )
   }
 
+  mapLinks(linkList){
+    linkList.map(link => {
+      addLink(link)
+    })
+  }
+
   render(){
     return(this.state.thisPreset)
   }
 }
 
-//6 rows 12 cols
-//assignemnt 1 layout
+//preset nodes and links
 var presetOne = {
   nodes: [
     {
@@ -70,6 +80,18 @@ var presetOne = {
       type: 'router',
       row:5,
       col:8,
+    }
+  ],
+  links: [
+    {
+      from: 'host0',
+      to: 'router0'
+    },{
+      from: 'router0',
+      to: 'router1'
+    },{
+      from: 'router1',
+      to: 'host1'
     }
   ]
 }
@@ -106,6 +128,24 @@ var presetTwo = {
       type: 'router',
       row:3,
       col:5,
+    }
+  ],
+  links: [
+    {
+      from: 'host0',
+      to: 'router0'
+    },{
+      from: 'router0',
+      to: 'router1'
+    },{
+      from: 'router1',
+      to: 'host1'
+    },{
+      from: 'router0',
+      to: 'router2'
+    },{
+      from: 'router2',
+      to: 'host2'
     }
   ]
 }
@@ -163,6 +203,48 @@ var presetThree = {
       type: 'router',
       row:3,
       col:9,
+    }
+  ],
+  links: [
+    {
+      from: 'host0',
+      to: 'router0'
+    },{
+      from: 'router0',
+      to: 'router1'
+    },{
+      from: 'router0',
+      to: 'router2'
+    },{
+      from: 'router1',
+      to: 'router3'
+    },{
+      from: 'router1',
+      to: 'router5'
+    },{
+      from: 'router2',
+      to: 'router3'
+    },{
+      from: 'router2',
+      to: 'router6'
+    },{
+      from: 'router3',
+      to: 'router4'
+    },{
+      from: 'router4',
+      to: 'router5'
+    },{
+      from: 'router4',
+      to: 'router6'
+    },{
+      from: 'router5',
+      to: 'router7'
+    },{
+      from: 'router6',
+      to: 'router7'
+    },{
+      from: 'router7',
+      to: 'host1'
     }
   ]
 }

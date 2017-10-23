@@ -2,6 +2,7 @@ import React from 'react'
 import cSprite from '../images/computersprite.png'
 import rSprite from '../images/routersprite2.png'
 import OSILayover from './OSILayover'
+import Fade from './Fade'
 
 export default class NetNode extends React.Component{
   constructor(props){
@@ -47,6 +48,7 @@ export default class NetNode extends React.Component{
 
   render(){
     return(
+      <Fade>
       <div className='node-container'
            id={this.state.id}
            style = {{
@@ -58,7 +60,7 @@ export default class NetNode extends React.Component{
            </div>
            {this.state.layover}
       </div>
-
+      </Fade>
     )
   }
 }

@@ -6,12 +6,19 @@ html{
   --accentred: #e12200;
 }
 body{
-  min-width: 900px;
+  width: 1000px;
+  margin: 0 auto;
+  background: var(--blue3);
   user-select: none;
+}
+.App{
 }
 /*nav header*/
 #app-nav{
   background: var(--blue2);
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+  margin-bottom: 5px;
 }
 .side-nav{
   background: var(--blue3);
@@ -33,24 +40,27 @@ body{
   visibility: hidden;
 }
 #status-box{
+  overflow: scroll;
   position: absolute;
   align-self: center;
   margin: 10px auto;
   width: 658px;
   height: 158px;
   border-radius: 4px;
-  box-shadow: 0 0 3px rgba(0,0,0,0.4);
+  box-shadow: 0 0 6px rgba(0,0,0,0.7);
   background: var(--blue1);
+  z-index: 10;
 }
 #node-field-container{
   padding-top: 185px;
-  min-height: 700px;
-  background: var(--blue3);
+  max-height: 755px;
+  z-index: 2;
 }
 #node-field{
   display: grid;
   grid-template-rows: repeat(6,1fr);
   grid-template-columns: repeat(12,1fr);
+  max-height: 570px;
 }
 .node, #node-container{
 }
@@ -61,14 +71,13 @@ body{
   box-shadow: 0 0 4px rgba(0,0,0,0.5)
 }
 #node-field-content{
-  background: blue;
   min-height: 650px;
 }
-#link-field-container{
-
-}
 #link-field{
-
+  position: absolute;
+  z-index: 1;
+  width: 1000px;
+  height:755px;
 }
 
 .fade-appear{

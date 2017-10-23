@@ -6,6 +6,7 @@ const Fade = (props) => {
     <CSSTransition
        in={true}
        appear={true}
+       exit={true}
        classNames='fade'
        timeout={150}>
        {props.children}

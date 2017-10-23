@@ -9,7 +9,7 @@ class NetworkStore extends EventEmitter {
 
     //initial network info
     this.networkState = {
-      nodes: ['butts'],
+      nodes: [],
       links: []
     }
   }
@@ -26,6 +26,10 @@ class NetworkStore extends EventEmitter {
   addLink(newLink){
     this.networkState.links.push(newLink)
     this.emit('change')
+  }
+
+  updateNode(newData){
+
   }
 
   clearState(){
@@ -46,6 +50,9 @@ class NetworkStore extends EventEmitter {
         break
       case 'ADD_LINK':
         this.addLink(action.data)
+        break
+      case 'UPDATE_NODE':
+        this.updateNode(action.data)
         break
       case 'CLEAR_STATE':
         this.clearState()

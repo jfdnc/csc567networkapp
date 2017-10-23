@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import DisplayStore from '../data/stores/DisplayStore'
 import AssignmentPreset from './AssignmentPreset'
 
-export default class MainContainer extends Component{
+export default class NodeField extends Component{
   constructor(props){
     super(props)
 
@@ -42,7 +42,6 @@ export default class MainContainer extends Component{
       <div id='node-field-container'>
         <div id='node-field'>
           {this.state.assignment}
-          {DisplayStore.getCurrAssignment() != 'default' ? this.props.children : ''}
         </div>
       </div>
     )
