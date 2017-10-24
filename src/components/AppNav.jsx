@@ -25,6 +25,7 @@ export default class AppNav extends Component{
   handleClick(a,e){
     e.preventDefault()
     document.documentElement.scrollTop = 0
+    document.getElementsByClassName('fixed-action-btn')[0].style.visibility = 'visible'
     clearState()
     switch(a){
       case 'default':

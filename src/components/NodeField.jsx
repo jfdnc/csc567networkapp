@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import DisplayStore from '../data/stores/DisplayStore'
-import AssignmentPreset from './AssignmentPreset'
+import PresetLoader from './PresetLoader'
 
 export default class NodeField extends Component{
   constructor(props){
@@ -24,15 +24,15 @@ export default class NodeField extends Component{
   loadView(a){
     switch(a){
       case 'default':
-      return <AssignmentPreset a='d' />
+      return <PresetLoader a='d' />
       case 'a1':
-      return <AssignmentPreset a='1' />
+      return <PresetLoader a='1' />
       break
       case 'a2':
-      return <AssignmentPreset a='2' />
+      return <PresetLoader a='2' />
       break
       case 'a3':
-      return <AssignmentPreset a='3' />
+      return <PresetLoader a='3' />
       break
     }
   }
