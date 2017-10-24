@@ -38,15 +38,27 @@ export default class OSILayover extends React.Component{
           <div
             style={{
               transform: `translateX(${this.state.offsetX}px) translateY(${this.state.offsetY}px)`,
-            }}
-            className='osi-layover handle'
-            id={`${this.state.hostName}-osi-layover`}>
-          <div className='osi-layover-header'>
-            <div className='host-name'>
-              {this.state.hostName}
+            }}>
+
+            <div id={`${this.state.hostName}-reveal-container`}
+                 className='layer-reveal-container'></div>
+
+            <div className='osi-layover handle'
+                   id={`${this.state.hostName}-osi-layover`}>
+
+            <div className='osi-layover-header'>
+              <div className='host-name'>
+                {this.state.hostName}
+              </div>
             </div>
-          </div>
-          {this.state.layers.map((thisLayer,i)=><OSILayer key={i} layer={thisLayer}/>)}
+            {this.state.layers.map((thisLayer,i)=>
+              <OSILayer key={i}
+                        parent={`${this.state.hostName}-osi-layover`}
+                        reveal={`${this.state.hostName}-reveal-container`}
+                        type={this.state.type}
+                        layer={thisLayer}/>)}
+
+            </div>
           </div>
         </Fade>
     )

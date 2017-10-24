@@ -7,12 +7,13 @@ html{
 }
 body{
   width: 1000px;
-  margin: 0 auto;
+  margin: 0 140px;
   background: var(--blue3);
   user-select: none;
   color: #656565;
 }
 .App{
+
 }
 #intro-page-container{
   display: grid;
@@ -181,6 +182,8 @@ body{
   background: var(--blue1);
   border-radius: 8px;
   box-shadow: 0 0 6px rgba(0,0,0,0.7);
+  transition: transform 500ms ease;
+  z-index: 3;
 }
 .osi-layover-header{
   display: grid;
@@ -202,6 +205,19 @@ body{
   font-size: 12px;
   margin: 2px;
   border: 1px solid #777;
+}
+.layer-reveal-container{
+  position: absolute;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  background: var(--blue1);
+  border-radius: 8px;
+  box-shadow: inset 0 0 6px rgba(0,0,0,0.7);
+  width: 0;
+  height: 0;
+  transition: all 500ms ease;
+  z-index: 2;
 }
 
 .active{
