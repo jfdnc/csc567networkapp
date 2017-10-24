@@ -20,8 +20,6 @@ export default class IntroPage extends React.Component{
   }
 
   render(){
-    let activePage = this.state.activePage
-
     return(
       <Fade>
         <div id='intro-page-container'>
@@ -31,7 +29,7 @@ export default class IntroPage extends React.Component{
             <CollectionItem id='code' className='intro-nav-item' onClick={()=>this.handleClick('code')}>Code</CollectionItem>
           </Collection>
           <div id='intro-info'>
-            <div id='docs-page' className={`${activePage == 'docs' ? 'active' : 'inactive'}`}>
+            <div id='docs-page' className={`${this.state.activePage == 'docs' ? 'active' : 'inactive'}`}>
               <h4>Documentation</h4>
               <hr/>
               <Tabs>
@@ -41,11 +39,11 @@ export default class IntroPage extends React.Component{
                 <Tab title='Assignment 3'>Assignment 3</Tab>
               </Tabs>
             </div>
-            <div id='test-page' className={`${activePage == 'test' ? 'active' : 'inactive'}`}>
+            <div id='test-page' className={`${this.state.activePage == 'test' ? 'active' : 'inactive'}`}>
               <h4>Test Info</h4>
               <hr/>
             </div>
-            <div id='code-page' className={`${activePage == 'code' ? 'active' : 'inactive'}`}>
+            <div id='code-page' className={`${this.state.activePage == 'code' ? 'active' : 'inactive'}`}>
               <h4>Code Info</h4>
               <hr/>
               <br/><br/>
