@@ -61,7 +61,7 @@ export default class AppNav extends Component{
               </Dropdown>
             </Col>
             <Col sm={2}>
-              <Button onClick={() => console.log(NetworkStore.getNetworkState())}>log</Button>
+              <Button onClick={() => console.log(NetworkStore.getNetworkState())}>log state to console</Button>
             </Col>
           </Row>
         </Navbar>

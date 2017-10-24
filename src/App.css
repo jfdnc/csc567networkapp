@@ -10,6 +10,7 @@ body{
   margin: 0 auto;
   background: var(--blue3);
   user-select: none;
+  color: #656565;
 }
 .App{
 }
@@ -33,10 +34,13 @@ body{
   box-shadow: 0 0 3px rgba(0,0,0,0.5);
 }
 .intro-nav-item{
+  transition: all 200ms ease-in;
 }
 .intro-nav-item:hover{
   cursor: pointer;
-  background: #ddd;
+  color: rgba(238,110,115,0.7);
+  background: #eee;
+  box-shadow: inset 0 0 2px rgba(0,0,0,0.5);
 }
 #intro-info{
   display: grid;
@@ -70,12 +74,22 @@ body{
   box-shadow: 0 2px 5px rgba(0,0,0,0.5);
   margin-bottom: 5px;
 }
+
 .side-nav{
   background: var(--blue3);
 }
 .btn{
   background: var(--blue1);
   color: var(--blue2);
+  transition: all 100ms ease-in;
+}
+.btn:focus{
+  background: var(--blue1);
+}
+.btn:hover{
+  color: rgba(238,110,115,0.7);
+  background: var(--blue1);
+
 }
 .disabled {
   pointer-events: none;
@@ -86,6 +100,9 @@ body{
   border-radius: 0 0 5px 5px;
   background: var(--blue1);
   box-shadow: 0 0 4px rgba(0,0,0,0.5);
+}
+.dropdown-content > li > a:hover{
+  color: rgba(238,110,115,0.7);
 }
 
 /*node field*/

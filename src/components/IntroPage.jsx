@@ -31,19 +31,24 @@ export default class IntroPage extends React.Component{
             <CollectionItem id='code' className='intro-nav-item' onClick={()=>this.handleClick('code')}>Code</CollectionItem>
           </Collection>
           <div id='intro-info'>
-            <div id='code-page' className={`${activePage == 'code' ? 'active' : 'inactive'}`}>
-              <h4>Code Info</h4>
-            </div>
-            <div id='test-page' className={`${activePage == 'test' ? 'active' : 'inactive'}`}>
-              <h4>Test Info</h4>
-            </div>
             <div id='docs-page' className={`${activePage == 'docs' ? 'active' : 'inactive'}`}>
               <h4>Documentation</h4>
+              <hr/>
               <Tabs>
+                <Tab title='Project'>Project</Tab>
                 <Tab title='Assignment 1'>Assignment 1</Tab>
                 <Tab title='Assignment 2'>Assignment 2</Tab>
                 <Tab title='Assignment 3'>Assignment 3</Tab>
               </Tabs>
+            </div>
+            <div id='test-page' className={`${activePage == 'test' ? 'active' : 'inactive'}`}>
+              <h4>Test Info</h4>
+              <hr/>
+            </div>
+            <div id='code-page' className={`${activePage == 'code' ? 'active' : 'inactive'}`}>
+              <h4>Code Info</h4>
+              <hr/>
+              <br/><br/>
             </div>
           </div>
         </div>
