@@ -24,7 +24,7 @@ export default class AppNav extends Component{
 
   handleClick(a,e){
     e.preventDefault()
-    document.getElementsByClassName('App')[0].scrollTop = 0
+    document.documentElement.scrollTop = 0
     clearState()
     switch(a){
       case 'default':

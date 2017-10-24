@@ -39,11 +39,29 @@ body{
   background: #ddd;
 }
 #intro-info{
+  display: grid;
   grid-column: 2;
   background: #fff;
-  margin: 2px;
+  margin: 10px 10px 10px 2px;
   border-radius: 2px;
   border: 1px solid #bbb;
+  padding: 0 10px;
+  box-shadow: 0 0 3px rgba(0,0,0,0.5);
+}
+.tabs > .tab > a{
+  color: var(--blue2);
+}
+#code-page{
+  grid-column: 1;
+  grid-row: 1;
+}
+#test-page{
+  grid-column: 1;
+  grid-row: 1;
+}
+#docs-page{
+  grid-column: 1;
+  grid-row: 1;
 }
 /*nav header*/
 #app-nav{
@@ -167,4 +185,11 @@ body{
   font-size: 12px;
   margin: 2px;
   border: 1px solid #777;
+}
+
+.active{
+  visibility: visible;
+}
+.inactive{
+  visibility: hidden;
 }
