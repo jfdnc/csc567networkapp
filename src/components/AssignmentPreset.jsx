@@ -1,5 +1,6 @@
 import React from 'react'
 import NetNode from './NetNode'
+import IntroPage from './IntroPage'
 import { addNode, addLink } from '../action/actions/network_actions'
 import LinkLayer from './LinkLayer'
 
@@ -8,30 +9,45 @@ export default class AssignmentPreset extends React.Component{
     super(props)
 
     this.state = {
-      thisPreset: <h1>default display</h1>
+      thisPreset: <IntroPage/>
     }
 
     this.mapNodes = this.mapNodes.bind(this)
     this.mapLinks = this.mapLinks.bind(this)
+    this.toggleTop = this.toggleTop.bind(this)
   }
 
   componentWillReceiveProps(props){
     switch(props.a){
       case 'd':
-      this.setState({thisPreset: <h1>default display</h1>})
+      this.setState({thisPreset: <IntroPage/>})
+      this.toggleTop(0)
       break
       case '1':
       this.setState({thisPreset: this.mapNodes(presetOne.nodes)})
       this.mapLinks(presetOne.links)
+      this.toggleTop(1)
       break
       case '2':
       this.setState({thisPreset: this.mapNodes(presetTwo.nodes)})
       this.mapLinks(presetTwo.links)
+      this.toggleTop(1)
       break
       case '3':
       this.setState({thisPreset: this.mapNodes(presetThree.nodes)})
       this.mapLinks(presetThree.links)
+      this.toggleTop(1)
       break
+    }
+  }
+
+  toggleTop(t){
+    if(t){
+      document.getElementById('status-box').style.height = '158px'
+      document.getElementById('node-field-container').style.paddingTop = '185px'
+    } else {
+      document.getElementById('status-box').style.height = '0'
+      document.getElementById('node-field-container').style.paddingTop = '0'
     }
   }
 

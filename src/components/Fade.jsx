@@ -8,7 +8,7 @@ const Fade = (props) => {
        appear={true}
        exit={true}
        classNames='fade'
-       timeout={150}>
+       timeout={300}>
        {props.children}
     </CSSTransition>
   )

@@ -9,11 +9,11 @@ export function addNode(newNode){
   })
 }
 
-export function updateNode(newData){
+export function addNodeLocation(newNodeLocation){
   dispatcher.dispatch({
     //only use actions from ActionTypes - consistent communication!
-    type: NetworkActionTypes.UPDATE_NODE,
-    data: newData,
+    type: NetworkActionTypes.ADD_NODE_LOCATION,
+    data: newNodeLocation,
   })
 }
 

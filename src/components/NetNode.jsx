@@ -3,6 +3,7 @@ import cSprite from '../images/computersprite.png'
 import rSprite from '../images/routersprite2.png'
 import OSILayover from './OSILayover'
 import Fade from './Fade'
+import { addNodeLocation } from '../action/actions/network_actions'
 
 export default class NetNode extends React.Component{
   constructor(props){
@@ -19,6 +20,25 @@ export default class NetNode extends React.Component{
     }
 
     this.handleClick = this.handleClick.bind(this)
+    this.addLocation = this.addLocation.bind(this)
+  }
+
+  componentDidMount(){
+    //needs to wait to render??
+    setTimeout(this.addLocation, 200)
+  }
+
+  addLocation(){
+    let thisRect = document
+                      .getElementById(this.state.id)
+                      .getBoundingClientRect(),
+    thisNodeLocation = {}
+    thisNodeLocation[`${this.state.id.split('-')[0]}`] = {
+      x:thisRect.x,
+      y:thisRect.y
+    }
+
+    addNodeLocation(thisNodeLocation)
   }
 
   handleClick(){
@@ -49,17 +69,17 @@ export default class NetNode extends React.Component{
   render(){
     return(
       <Fade>
-      <div className='node-container'
-           id={this.state.id}
-           style = {{
-             gridRow: this.state.row,
-             gridColumn: this.state.col,
-           }}>
-      <div className='node'
-           onClick={this.handleClick}><img src={this.state.img}/>
-           </div>
-           {this.state.layover}
-      </div>
+        <div className='node-container'
+             id={this.state.id}
+             style = {{
+               gridRow: this.state.row,
+               gridColumn: this.state.col,
+             }}>
+        <div className='node'
+             onClick={this.handleClick}><img src={this.state.img}/>
+             </div>
+             {this.state.layover}
+        </div>
       </Fade>
     )
   }

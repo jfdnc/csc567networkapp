@@ -45,7 +45,6 @@ export default class OSILayover extends React.Component{
             <div className='host-name'>
               {this.state.hostName}
             </div>
-            <Icon className='icon-close'>close</Icon>
           </div>
           {this.state.layers.map((thisLayer,i)=><OSILayer key={i} layer={thisLayer}/>)}
           </div>

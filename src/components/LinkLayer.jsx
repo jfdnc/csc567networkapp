@@ -1,6 +1,7 @@
 import React from 'react'
 import NetworkStore from '../data/stores/NetworkStore'
 import DisplayStore from '../data/stores/DisplayStore'
+import Fade from './Fade'
 
 export default class LinkLayer extends React.Component{
   constructor(props){
@@ -18,14 +19,14 @@ export default class LinkLayer extends React.Component{
 
   componentDidMount(){
     NetworkStore.on('change', () => {
+      let newState = NetworkStore.getNetworkState()
       this.setState({
-        nodes: NetworkStore.getNetworkState().nodes,
-        links: NetworkStore.getNetworkState().links,
-      })
-      this.setState({
-        svgs: this.mapLinks(this.state.nodes, this.state.links)
+        nodes: newState.nodes,
+        links: newState.links,
+        svgs: this.mapLinks(newState.nodes, newState.links)
       })
     })
+
     DisplayStore.on('change', () => {
       if(DisplayStore.getCurrAssignment() == 'default'){
         this.clearLinks()
@@ -33,14 +34,35 @@ export default class LinkLayer extends React.Component{
     })
   }
 
+
   mapLinks(nodeArray, linkArray){
-    return(
-      linkArray.map((link,i) => {
-        return(
-          <h6 key={i}>{`link from ${link.from} to ${link.to}`}</h6>
-        )
-      })
-    )
+    let nodeLocations = NetworkStore.getNetworkState().nodeLocations
+    let x1,y1,x2,y2
+
+    if(nodeLocations.length > 0 && nodeLocations.length == nodeArray.length){
+      let tempKeys = {}
+      for(var i in nodeLocations){
+        let tempStr = [...Object.keys(nodeLocations[i])].toString()
+        tempKeys[tempStr] = {...nodeLocations[i][tempStr]}
+      }
+
+      //TODO: figure out offsets - window scroll is odd also
+      return(
+        linkArray.map((link,i) => {
+          x1 = tempKeys[link.from].x - 85
+          y1 = tempKeys[link.from].y - 20
+          x2 = tempKeys[link.to].x - 85
+          y2 = tempKeys[link.to].y - 20
+          return(
+            <line x1={x1}
+                  y1={y1}
+                  x2={x2}
+                  y2={y2}
+                  style={{stroke:'#000000',strokeWidth:4}} key={i}/>
+          )
+        })
+      )
+    }
   }
 
   clearLinks(){
@@ -53,9 +75,11 @@ export default class LinkLayer extends React.Component{
 
   render(){
     return(
-      <div id='link-field'>
-        {this.state.svgs}
-      </div>
+        <div id='link-field'>
+          <svg width={1000} height={755}>
+            {this.state.svgs}
+          </svg>
+        </div>
     )
   }
 }
