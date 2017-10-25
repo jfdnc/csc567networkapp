@@ -144,10 +144,9 @@ body{
   color: var(--blue2);
 }
 .status-tab-active{
-  background: green;
+  color: var(--rose);
 }
 .status-tab:hover{
-  color: var(--rose);
   cursor: pointer;
   transition: all 200ms ease;
 }
@@ -155,8 +154,53 @@ body{
   grid-row: 1;
   border-bottom: 1px solid #676767;
 }
+#network-status-content{
+  grid-row: 1;
+  grid-column: 1;
+}
 #message-status-tab{
   grid-row: 2;
+}
+#message-status-content{
+  grid-row: 1;
+  grid-column: 1;
+  display: grid;
+  grid-template-columns: 3;
+  grid-template-rows: 30;
+}
+#message-id{
+  grid-row: 1;
+  grid-column: 1;
+}
+#message-node{
+  grid-row: 1;
+  grid-column: 2;
+}
+#message-current-layer{
+  grid-row: 1;
+  grid-column: 3;
+}
+#message-detail{
+  grid-row: 2/30;
+  grid-column: 1/4;
+  display: grid;
+  grid-template-rows: 7;
+  background: #e7e7e7;
+}
+#message-list-container{
+  grid-column: 3;
+  background: #f7f7f7;
+  border-radius: 4px;
+  margin: 3px;
+  padding: 3px;
+  box-shadow: 0 0 3px rgba(0,0,0,0.4);
+  overflow: scroll;
+}
+#message-list-container:hover{
+  box-shadow: 0 0 5px rgba(0,0,0,0.7);
+}
+#message-list>ul{
+  margin: 0 3px;
 }
 #status-box-window-container{
   grid-column: 2;
@@ -164,6 +208,8 @@ body{
   background: var(--blue1);
 }
 #status-box-window{
+  display: grid;
+  padding: 5px;
   background: #f7f7f7;
   box-shadow: 0 0 3px rgba(0,0,0,0.4);
   margin-top: 3px;

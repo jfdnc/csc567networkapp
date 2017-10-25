@@ -2,19 +2,47 @@
 import dispatcher from '../Dispatcher'
 //for emitting events to UI components concerned with this store
 import { EventEmitter } from 'events'
+import _ from 'lodash'
 
 class MessageStore extends EventEmitter {
   constructor(props){
     super(props)
 
-    //initial log info
+    //initial message info
+    /**
+    *
+    *
+    messages = [
+      {
+        id: ''
+        node: ''
+        layer: ''
+        contents: ''
+      }
+      ]
+    *
+    *
+    *
+    *
+    **/
     this.messageState = {
-      messages: []
+      messages: [
+      ]
     }
   }
 
   getMessageState(){
     return this.messageState
+  }
+
+  getMessages(){
+    return this.messageState.messages
+  }
+
+  addMessage(newMessage){
+    console.log(`pushing ${newMessage}`)
+    this.messageState.messages.push(newMessage)
+    this.emit('change')
   }
 
 

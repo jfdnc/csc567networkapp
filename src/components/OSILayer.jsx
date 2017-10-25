@@ -1,5 +1,6 @@
 import React from 'react'
 import { Button } from 'react-materialize'
+import { setReveal } from '../action/actions/display_actions'
 
 export default class OSILayer extends React.Component {
   constructor(props){
@@ -13,6 +14,7 @@ export default class OSILayer extends React.Component {
   }
 
   handleClick(layer){
+    //setReveal(layer)
     let newState = !this.state.layerOpen
 
     let parentDiv = document.getElementById(this.props.parent),
@@ -26,7 +28,6 @@ export default class OSILayer extends React.Component {
         parentDiv.style = 'transform: translateX(-145px)'
         revealDiv.style = 'width: 500px; height:322px; border-radius: 0 8px 8px 8px'
       }
-      revealDiv.innerHTML = this.props.layer
     } else {
       parentDiv.style = 'transform: translateX(0)'
       revealDiv.style = 'width: 0px'

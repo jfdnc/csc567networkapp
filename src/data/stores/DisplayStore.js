@@ -9,7 +9,8 @@ class DisplayStore extends EventEmitter {
 
     //initial log info
     this.displayState = {
-      assignmentDisplayed: 'default'
+      assignmentDisplayed: 'default',
+      revealDisplayed: ''
     }
   }
 
@@ -41,8 +42,17 @@ class DisplayStore extends EventEmitter {
     this.emit("change")
   }
 
+  setReveal(reveal){
+    this.displayState.revealDisplayed = reveal
+    this.emit('change')
+  }
+
   getCurrAssignment(){
     return this.displayState.assignmentDisplayed
+  }
+
+  getRevealDisplayed(){
+    return this.displayState.revealDisplayed
   }
 
 
@@ -62,6 +72,9 @@ class DisplayStore extends EventEmitter {
         break
       case 'DISPLAY_A3':
         this.displayA3()
+        break
+      case 'SET_REVEAL':
+        this.setReveal(action.reveal)
         break
     }
   }

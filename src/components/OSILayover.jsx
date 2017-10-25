@@ -1,7 +1,9 @@
 import React from 'react'
 import OSILayer from './OSILayer'
 import Fade from './Fade'
-import { Icon } from 'react-materialize'
+import { Icon, Button } from 'react-materialize'
+import { addMessage } from '../action/actions/message_actions'
+import DisplayStore from '../data/stores/DisplayStore'
 
 let OSILayers = [
   'Application',
@@ -21,7 +23,8 @@ export default class OSILayover extends React.Component{
       offsetX: props.offsetX,
       offsetY: props.offsetY,
       hostName: props.hostName,
-      type: props.type
+      type: props.type,
+      revealDisplayed: DisplayStore.getRevealDisplayed()
     }
 
     this.state.layers = this.state.type == 'host' ? OSILayers : OSILayers.slice(-3)
@@ -29,7 +32,9 @@ export default class OSILayover extends React.Component{
 
 
   componentWillMount(){
-
+    DisplayStore.on('change', ()=> {
+      this.setState({revealDisplayed: DisplayStore.getRevealDisplayed()})
+    })
   }
 
   render(){
@@ -41,7 +46,9 @@ export default class OSILayover extends React.Component{
             }}>
 
             <div id={`${this.state.hostName}-reveal-container`}
-                 className='layer-reveal-container'></div>
+                 className='layer-reveal-container'>
+                 {this.state.revealDisplayed}
+            </div>
 
             <div className='osi-layover handle'
                    id={`${this.state.hostName}-osi-layover`}>
