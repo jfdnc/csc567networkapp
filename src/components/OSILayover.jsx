@@ -4,6 +4,7 @@ import Fade from './Fade'
 import { Icon, Button } from 'react-materialize'
 import { addMessage } from '../action/actions/message_actions'
 import DisplayStore from '../data/stores/DisplayStore'
+import Reveal from './Reveal'
 
 let OSILayers = [
   'Application',
@@ -47,7 +48,7 @@ export default class OSILayover extends React.Component{
 
             <div id={`${this.state.hostName}-reveal-container`}
                  className='layer-reveal-container'>
-                 {this.state.revealDisplayed}
+                 <Reveal layer={this.state.revealDisplayed}/>
             </div>
 
             <div className='osi-layover handle'
@@ -63,7 +64,8 @@ export default class OSILayover extends React.Component{
                         parent={`${this.state.hostName}-osi-layover`}
                         reveal={`${this.state.hostName}-reveal-container`}
                         type={this.state.type}
-                        layer={thisLayer}/>)}
+                        layer={thisLayer}
+                        currRevealDisplayed={this.state.revealDisplayed}/>)}
 
             </div>
           </div>

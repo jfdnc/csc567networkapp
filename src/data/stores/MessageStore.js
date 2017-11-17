@@ -26,8 +26,7 @@ class MessageStore extends EventEmitter {
     *
     **/
     this.messageState = {
-      messages: [
-      ]
+      messages: []
     }
   }
 

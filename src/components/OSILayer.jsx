@@ -14,8 +14,14 @@ export default class OSILayer extends React.Component {
   }
 
   handleClick(layer){
-    //setReveal(layer)
-    let newState = !this.state.layerOpen
+    let newState
+    let prevReveal = this.props.currRevealDisplayed
+    if(prevReveal === layer){
+      newState = false
+    } else {
+      newState = true
+    }
+    setReveal(layer)
 
     let parentDiv = document.getElementById(this.props.parent),
         revealDiv = document.getElementById(this.props.reveal)
@@ -30,7 +36,7 @@ export default class OSILayer extends React.Component {
       }
     } else {
       parentDiv.style = 'transform: translateX(0)'
-      revealDiv.style = 'width: 0px'
+      revealDiv.style = 'width: 0px; visibility: hidden'
     }
 
     this.setState({

@@ -26,7 +26,6 @@ export function displayA3(){
   })
 }
 export function setReveal(reveal){
-  console.log('setting reveal')
   dispatcher.dispatch({
     //only use actions from ActionTypes - consistent communication!
     type: DisplayActionTypes.SET_REVEAL,
