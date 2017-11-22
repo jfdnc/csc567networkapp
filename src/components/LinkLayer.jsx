@@ -34,7 +34,6 @@ export default class LinkLayer extends React.Component{
     })
   }
 
-
   mapLinks(nodeArray, linkArray){
     let nodeLocations = NetworkStore.getNetworkState().nodeLocations
     let x1,y1,x2,y2
@@ -49,12 +48,14 @@ export default class LinkLayer extends React.Component{
       //TODO: figure out offsets - window scroll is odd also
       return(
         linkArray.map((link,i) => {
-          x1 = tempKeys[link.from].x - 85
-          y1 = tempKeys[link.from].y - 20
-          x2 = tempKeys[link.to].x - 85
-          y2 = tempKeys[link.to].y - 20
+          let linkId = `${link.links.from}-${link.links.to}`
+          x1 = tempKeys[link.links.from].x - 85
+          y1 = tempKeys[link.links.from].y - 20
+          x2 = tempKeys[link.links.to].x - 85
+          y2 = tempKeys[link.links.to].y - 20
           return(
-            <line x1={x1}
+            <line id={linkId}
+                  x1={x1}
                   y1={y1}
                   x2={x2}
                   y2={y2}

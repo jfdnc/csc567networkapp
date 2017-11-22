@@ -20,12 +20,24 @@ class NetworkStore extends EventEmitter {
   }
 
   addNode(newNode){
-    this.networkState.nodes.push(newNode)
+    //dont push if its already there!
+    let check = this.networkState.nodes.map(node => node.id === newNode.id)
+                                       .reduce((acc,ele)=>{return acc += ele ? 1 : 0},0)
+    if(!check){this.networkState.nodes.push(newNode)}
     this.emit('change')
   }
 
   addLink(newLink){
-    this.networkState.links.push(newLink)
+    let check = this.networkState.links.map(link => link.links == newLink)
+                                       .reduce((acc,ele) =>{ return acc += ele }, 0)
+    if(!check){
+      let linkObj = {
+        w1: Math.floor(Math.random()*7 + 1),
+        w2: Math.floor(Math.random()*7 + 1),
+        links: newLink
+      }
+      this.networkState.links.push(linkObj)
+    }
     this.emit('change')
   }
 

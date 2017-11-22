@@ -59,6 +59,7 @@ export default class OSILayover extends React.Component{
                 {this.state.hostName}
               </div>
             </div>
+
             {this.state.layers.map((thisLayer,i)=>
               <OSILayer key={i}
                         parent={`${this.state.hostName}-osi-layover`}
