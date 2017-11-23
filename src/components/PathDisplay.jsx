@@ -133,8 +133,8 @@ constructPath(shortestPathInfo, endVertex) {
     let nodeArr = this.state.nodes.map(node => node.id.split('-')[0])
     let spBlue = this.constructPath(blueInfo,1),
         spRed = this.constructPath(redInfo, 1)
-    spBlue = spBlue.map(index => nodeArr[index])
-    spRed = spRed.map(index => nodeArr[index])
+    let spBlueNames = spBlue.map(index => nodeArr[index])
+    let spRedNames = spRed.map(index => nodeArr[index])
     //TODO: FIX PATH WEIGHT OUTPUTS - PATHS CORRECT, NUMBERS ARE JUST PULLING FROM ARRAY IN ORDER
     //switch red path for particular assignment
     let currStep = 'host0'
@@ -143,10 +143,11 @@ constructPath(shortestPathInfo, endVertex) {
       <div id='path-list'>
       <div id='blue-path-list'>
         <h6 style={{'color':'blue'}}>Blue Path <b style={{fontSize:'12px',color:'black'}}> to host1</b></h6>
-        <ul style={{'margin-top':'0px'}}>
-          {spBlue.map((step,i) => {
-            let listOut = <li key={i}>{currStep} to {step} => weight: <b style={{'color':'blue'}}>{this.state.links[i].w1}</b></li>
-            totalWeight += this.state.links[i].w1
+        <ul style={{marginTop:'0px'}}>
+          {spBlueNames.map((step,i) => {
+            let thisWeight = this.state.links.filter(link => link.links.from === currStep && link.links.to === step)[0].w1
+            let listOut = <li key={i}>{currStep} to {step} => weight: <b style={{'color':'blue'}}>{thisWeight}</b></li>
+            totalWeight += thisWeight
             currStep = step
             return(
               listOut
@@ -157,11 +158,12 @@ constructPath(shortestPathInfo, endVertex) {
         </div>
         <div id='red-path-list'>
         <h6 style={{'color':'red'}}>Red Path <b style={{fontSize:'12px',color:'black'}}> to host1</b></h6>
-        <ul style={{'margin-top':'0px'}}>
-          {spBlue.map((step,i) => {
+        <ul style={{marginTop:'0px'}}>
+          {spRedNames.map((step,i) => {
             if(i == 0){currStep = 'host0'; totalWeight = 0;}
-            let listOut = <li key={i}>{currStep} to {step} => weight: <b style={{'color':'red'}}>{this.state.links[i].w2}</b></li>
-            totalWeight += this.state.links[i].w2
+            let thisWeight = this.state.links.filter(link => link.links.from === currStep && link.links.to === step)[0].w2
+            let listOut = <li key={i}>{currStep} to {step} => weight: <b style={{'color':'red'}}>{thisWeight}</b></li>
+            totalWeight += thisWeight
             currStep = step
             return(
               listOut
