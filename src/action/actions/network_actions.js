@@ -25,6 +25,21 @@ export function addLink(newLink){
   })
 }
 
+export function updateWeights(){
+  dispatcher.dispatch({
+    //only use actions from ActionTypes - consistent communication!
+    type: NetworkActionTypes.UPDATE_WEIGHTS
+  })
+}
+
+export function addColors(hotLinks){
+  dispatcher.dispatch({
+    //only use actions from ActionTypes - consistent communication!
+    type: NetworkActionTypes.ADD_COLORS,
+    hotLinks: hotLinks
+  })
+}
+
 export function clearState(){
   dispatcher.dispatch({
     //only use actions from ActionTypes - consistent communication!

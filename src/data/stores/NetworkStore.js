@@ -41,6 +41,79 @@ class NetworkStore extends EventEmitter {
     this.emit('change')
   }
 
+  updateWeights(){
+    let updatedLinks = this.networkState.links.map(link => {
+      return(
+        {
+          w1: Math.floor(Math.random()*7 + 1),
+          w2: Math.floor(Math.random()*7 + 1),
+          links: link.links
+        }
+      )
+    })
+
+    this.networkState.links = updatedLinks
+    this.emit('change')
+  }
+
+  addColors(hotLinks){
+    let checkBlue = hotLinks.blue.map(blueLink => {
+      return(
+        this.networkState.links.map(link => {
+          return(
+            link.links.from === blueLink.from && link.links.to === blueLink.to
+          )
+        })
+      )
+    })
+    //console.log(checkBlue)
+
+    let combinedBlue = new Array(checkBlue[0].length).fill(false)
+    for(let i=0;i<checkBlue.length;i++){
+      for(let j=0;j<checkBlue[0].length;j++){
+        if(checkBlue[i][j] == true){
+          combinedBlue[j] = true
+        }
+      }
+    }
+
+    let checkRed = hotLinks.red.map(redLink => {
+      return(
+        this.networkState.links.map(link => {
+          return(
+            link.links.from === redLink.from && link.links.to === redLink.to
+          )
+        })
+      )
+    })
+    //console.log(checkBlue)
+
+    let combinedRed = new Array(checkRed[0].length).fill(false)
+    for(let i=0;i<checkRed.length;i++){
+      for(let j=0;j<checkRed[0].length;j++){
+        if(checkRed[i][j] == true){
+          combinedRed[j] = true
+        }
+      }
+    }
+    console.log(combinedRed)
+
+    let coloredLinks = this.networkState.links.map((link,i) => {
+      let linkColor = combinedRed[i] && combinedBlue[i] ? 'purple' : combinedBlue[i] ? 'blue' : combinedRed[i] ? 'red' : '#000'
+      return(
+        {
+          w1: Math.floor(Math.random()*7 + 1),
+          w2: Math.floor(Math.random()*7 + 1),
+          links: link.links,
+          color: linkColor
+        }
+      )
+    })
+
+    this.networkState.links = coloredLinks
+    this.emit('change')
+  }
+
   addNodeLocation(newNodeLocation){
     this.networkState.nodeLocations.push(newNodeLocation)
     this.emit('change')
@@ -65,6 +138,12 @@ class NetworkStore extends EventEmitter {
         break
       case 'ADD_LINK':
         this.addLink(action.data)
+        break
+      case 'UPDATE_WEIGHTS':
+        this.updateWeights()
+        break
+      case 'ADD_COLORS':
+        this.addColors(action.hotLinks)
         break
       case 'ADD_NODE_LOCATION':
         this.addNodeLocation(action.data)

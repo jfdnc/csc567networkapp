@@ -189,6 +189,9 @@ body{
 #status-links > ul > li:hover{
   background: rgba(64,200,64,0.4);
 }
+#path-calc-btn:hover{
+  cursor: pointer;
+}
 #path-display-container{
   grid-column: 5/11;
   overflow: scroll;

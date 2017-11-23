@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Navbar, NavItem, Dropdown, Button, Row, Col } from 'react-materialize'
 import { displayDefault, displayA1, displayA2, displayA3 } from '../action/actions/display_actions'
-import { clearState } from '../action/actions/network_actions'
+import { clearState, updateWeights } from '../action/actions/network_actions'
 import NetworkStore from '../data/stores/NetworkStore'
 import DisplayStore from '../data/stores/DisplayStore'
 
@@ -42,6 +42,7 @@ export default class AppNav extends Component{
       break
     }
   }
+
   render(){
     let check = DisplayStore.getCurrAssignment()
 
@@ -60,6 +61,9 @@ export default class AppNav extends Component{
                 <NavItem className={this.state.check == 'a2' ? 'disabled' : ''} onClick={(e) => this.handleClick('a2',e)}>Assignment 2</NavItem>
                 <NavItem className={this.state.check == 'a3' ? 'disabled' : ''} onClick={(e) => this.handleClick('a3',e)}>Assignment 3</NavItem>
               </Dropdown>
+            </Col>
+            <Col sm={2}>
+              <Button onClick={() => updateWeights()}>Reload Nodes</Button>
             </Col>
             <Col sm={2}>
               <Button onClick={() => console.log(NetworkStore.getNetworkState())}>log state to console</Button>

@@ -59,7 +59,7 @@ export default class LinkLayer extends React.Component{
                   y1={y1}
                   x2={x2}
                   y2={y2}
-                  style={{stroke:'#000000',strokeWidth:4}} key={i}/>
+                  style={{stroke:`${link.color ? link.color : '#000'}`,strokeWidth:4}} key={i}/>
           )
         })
       )

@@ -1,6 +1,7 @@
 import React from 'react'
 import NetworkStore from '../data/stores/NetworkStore'
 import DisplayStore from '../data/stores/DisplayStore'
+import { addColors } from '../action/actions/network_actions'
 
 export default class PathDisplay extends React.Component{
   constructor(props){
@@ -8,7 +9,7 @@ export default class PathDisplay extends React.Component{
 
     this.state = {
       ...NetworkStore.getNetworkState(),
-      pathList: "Click 'Calculate' to calculate paths"
+      pathList: props.pathList
     }
 
     this.handleClick = this.handleClick.bind(this)
@@ -135,8 +136,8 @@ constructPath(shortestPathInfo, endVertex) {
         spRed = this.constructPath(redInfo, 1)
     let spBlueNames = spBlue.map(index => nodeArr[index])
     let spRedNames = spRed.map(index => nodeArr[index])
-    //TODO: FIX PATH WEIGHT OUTPUTS - PATHS CORRECT, NUMBERS ARE JUST PULLING FROM ARRAY IN ORDER
-    //switch red path for particular assignment
+    let nodeColorArgs = {red:[],blue:[]}
+    //todo switch red path for particular assignment - a2
     let currStep = 'host0'
     let totalWeight = 0
     let newPathList =
@@ -146,6 +147,7 @@ constructPath(shortestPathInfo, endVertex) {
         <ul style={{marginTop:'0px'}}>
           {spBlueNames.map((step,i) => {
             let thisWeight = this.state.links.filter(link => link.links.from === currStep && link.links.to === step)[0].w1
+            nodeColorArgs.blue.push({from:currStep,to:step})
             let listOut = <li key={i}>{currStep} to {step} => weight: <b style={{'color':'blue'}}>{thisWeight}</b></li>
             totalWeight += thisWeight
             currStep = step
@@ -162,6 +164,7 @@ constructPath(shortestPathInfo, endVertex) {
           {spRedNames.map((step,i) => {
             if(i == 0){currStep = 'host0'; totalWeight = 0;}
             let thisWeight = this.state.links.filter(link => link.links.from === currStep && link.links.to === step)[0].w2
+            nodeColorArgs.red.push({from:currStep,to:step})
             let listOut = <li key={i}>{currStep} to {step} => weight: <b style={{'color':'red'}}>{thisWeight}</b></li>
             totalWeight += thisWeight
             currStep = step
@@ -173,7 +176,9 @@ constructPath(shortestPathInfo, endVertex) {
         </ul>
         </div>
       </div>
-    this.setState({pathList: newPathList})
+      
+      addColors(nodeColorArgs)
+      this.setState({pathList: newPathList})
   }
 
 
@@ -181,7 +186,7 @@ constructPath(shortestPathInfo, endVertex) {
     return(
       <div id='path-display'>
         <b style={{color:'black'}}>Shortest Paths from Host0:</b>
-        <a onClick={()=> this.handleClick()}> Calculate</a>
+        <a id='path-calc-btn' onClick={() => this.handleClick()}> Calculate</a>
         <div id='path-list-container'>
           {this.state.pathList}
         </div>
