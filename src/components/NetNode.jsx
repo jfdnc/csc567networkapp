@@ -77,6 +77,7 @@ export default class NetNode extends React.Component{
              }}>
         <div className='node'
              onClick={this.handleClick}><img src={this.state.img}/>
+             <div style={{position:'absolute',color:'rgba(200,200,200,0.6)'}}>{this.state.id.split('-')[0]}</div>
              </div>
              {this.state.layover}
         </div>

@@ -10,7 +10,7 @@ class NetworkStore extends EventEmitter {
     //initial network info
     this.networkState = {
       nodes: [],
-      nodeLocatons: [],
+      nodeLocations: [],
       links: []
     }
   }

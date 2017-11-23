@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import MessageStore from '../data/stores/MessageStore'
 import DisplayStore from '../data/stores/DisplayStore'
+import PathDisplay from './PathDisplay'
 
 export default class StatusBox extends React.Component{
   constructor(props){
@@ -148,7 +149,7 @@ export default class StatusBox extends React.Component{
               </ul>
               </div>
               <div id='status-links'>
-              Links:
+              Links and Weights:
               <ul>
                 {netStat.links.length ? netStat.links.map((link,i) => {
                   return(
@@ -158,6 +159,9 @@ export default class StatusBox extends React.Component{
                   )
                 }) : ''}
               </ul>
+              </div>
+              <div id='path-display-container'>
+                <PathDisplay />
               </div>
             </div>
             <div className={`${activeTab == 'message' ? 'active' : 'inactive'}`}
