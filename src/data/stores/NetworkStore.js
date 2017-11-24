@@ -22,6 +22,10 @@ class NetworkStore extends EventEmitter {
           red:  0,
           blue: 0,
           tie: 0
+        },
+        currPath: {
+          red: [],
+          blue: []
         }
       }
     }
@@ -145,6 +149,10 @@ class NetworkStore extends EventEmitter {
         red:  0,
         blue: 0,
         tie: 0
+      },
+      currPath: {
+        red: [],
+        blue: []
       }
     }
   }
@@ -169,6 +177,10 @@ class NetworkStore extends EventEmitter {
           red:  0,
           blue: 0,
           tie: 0
+        },
+        currPath: {
+          red: [],
+          blue:[]
         }
       }
     }

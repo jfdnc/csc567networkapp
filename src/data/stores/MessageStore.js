@@ -26,7 +26,11 @@ class MessageStore extends EventEmitter {
     *
     **/
     this.messageState = {
-      messages: []
+      messages: {
+        redMsg: '',
+        blueMsg: ''
+      },
+      count: 0
     }
   }
 
@@ -40,7 +44,32 @@ class MessageStore extends EventEmitter {
 
   addMessage(newMessage){
     console.log(`pushing ${newMessage}`)
-    this.messageState.messages.push(newMessage)
+    switch(this.messageState.count){
+      case 0:
+        console.log(`pushing blue msg: ${newMessage}`)
+        this.messageState.messages.blueMsg = newMessage
+        this.messageState.count += 1
+        this.emit('change')
+        break
+      case 1:
+      console.log(`pushing red msg: ${newMessage}`)
+        this.messageState.messages.redMsg = newMessage
+        this.messageState.count += 1
+        this.emit('change')
+        break
+      default:
+        console.log('Message queue full')
+    }
+  }
+
+  clearMessages(){
+    this.messageState = {
+      messages: {
+        redMsg: '',
+        blueMsg: ''
+      },
+      count: 0
+    }
     this.emit('change')
   }
 
@@ -52,6 +81,9 @@ class MessageStore extends EventEmitter {
     switch(action.type){
       case 'ADD_MESSAGE':
         this.addMessage(action.message)
+        break
+      case 'CLEAR_MESSAGES':
+        this.clearMessages()
         break
     }
   }

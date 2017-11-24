@@ -1,6 +1,7 @@
 import React from 'react'
 import DisplayStore from '../data/stores/DisplayStore'
 import { addColors, setPathStats, resetPathStats } from '../action/actions/network_actions'
+import { Preloader } from 'react-materialize'
 
 export default class PathDisplay extends React.Component{
   constructor(props){
@@ -22,13 +23,11 @@ export default class PathDisplay extends React.Component{
     this.setState({...newProps,pathList:this.state.pathList})
   }
 
-  handleClick(){
-    //do this on mount based on assignment
-    let loops = 50,
-        delta = 150
+  handleClick(numLoops){
+    let loops = numLoops,
+        delta = loops == 1 ? 0 : 250
     for(let i=1; i<loops+1; i++){
       setTimeout(() => {
-        let thisAssignment = DisplayStore.getCurrAssignment()
         let thisAdjMatrix = this.constructAdjacencyMatrix(this.state.nodes,this.state.links)
         let blueInfo = this.shortestPath(thisAdjMatrix,this.state.nodes.length,0,'w1')
         let redInfo = this.shortestPath(thisAdjMatrix,this.state.nodes.length,0,'w2')
@@ -164,8 +163,9 @@ constructPath(shortestPathInfo, endVertex) {
 
   outputPaths(blueInfo,redInfo){
     let nodeArr = this.state.nodes.map(node => node.id.split('-')[0])
+    let thisAssignment = DisplayStore.getCurrAssignment()
     let spBlue = this.constructPath(blueInfo,1),
-        spRed = this.constructPath(redInfo, 1)
+        spRed = thisAssignment == 'a2' ? this.constructPath(redInfo, 2) : this.constructPath(redInfo, 1)
     let spBlueNames = spBlue.map(index => nodeArr[index])
     let spRedNames = spRed.map(index => nodeArr[index])
     let nodeColorArgs = {red:[],blue:[]}
@@ -180,7 +180,7 @@ constructPath(shortestPathInfo, endVertex) {
         <ul style={{marginTop:'0px'}}>
           {spBlueNames.map((step,i) => {
             let thisWeight = this.state.links.filter(link => link.links.from === currStep && link.links.to === step)[0].w1
-            nodeColorArgs.blue.push({from:currStep,to:step})
+            nodeColorArgs.blue.push({from:currStep,to:step,weight:thisWeight})
             let listOut = <li key={i}>{currStep} to {step} => weight: <b style={{'color':'blue'}}>{thisWeight}</b></li>
             totalBlueWeight += thisWeight
             currStep = step
@@ -192,12 +192,12 @@ constructPath(shortestPathInfo, endVertex) {
         </ul>
         </div>
         <div id='red-path-list'>
-        <h6 style={{'color':'red'}}>Red Path <b style={{fontSize:'12px',color:'black'}}> to host1</b></h6>
+        <h6 style={{'color':'red'}}>Red Path <b style={{fontSize:'12px',color:'black'}}> to {`${thisAssignment == 'a2' ? 'host2' : 'host1'}`}</b></h6>
         <ul style={{marginTop:'0px'}}>
           {spRedNames.map((step,i) => {
             if(i == 0){currStep = 'host0';}
             let thisWeight = this.state.links.filter(link => link.links.from === currStep && link.links.to === step)[0].w2
-            nodeColorArgs.red.push({from:currStep,to:step})
+            nodeColorArgs.red.push({from:currStep,to:step,weight:thisWeight})
             let listOut = <li key={i}>{currStep} to {step} => weight: <b style={{'color':'red'}}>{thisWeight}</b></li>
             totalRedWeight += thisWeight
             currStep = step
@@ -229,6 +229,10 @@ constructPath(shortestPathInfo, endVertex) {
             red: totalRedWeight < totalBlueWeight ? ++prevPathStats.wins.red : prevPathStats.wins.red,
             blue: totalBlueWeight < totalRedWeight ? ++prevPathStats.wins.blue : prevPathStats.wins.blue,
             tie: totalRedWeight === totalBlueWeight ? ++prevPathStats.wins.tie : prevPathStats.wins.tie
+          },
+          currPath: {
+            red: nodeColorArgs.red,
+            blue: nodeColorArgs.blue
           }
         }
 
@@ -246,7 +250,8 @@ constructPath(shortestPathInfo, endVertex) {
     return(
       <div id='path-display'>
         <b style={{color:'black'}}>Shortest Paths from Host0:</b>
-        <a id='path-calc-btn' onClick={() => this.handleClick()}> Calculate</a>
+        <a id='path-calc-btn' onClick={() => this.handleClick(50)}> <u>Calculate 50</u></a>
+        <a id='path-calc-btn' onClick={() => this.handleClick(1)}> <u>Calculate 1</u></a>
         <div id='path-list-container'>
           {this.state.pathList}
             <hr/>

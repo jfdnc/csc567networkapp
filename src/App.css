@@ -619,3 +619,25 @@ body{
 .inactive{
   visibility: hidden;
 }
+.app-widget{
+  display: grid;
+  width: 100%;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+#message-input{
+  grid-column: 1;
+}
+#queue-message{
+  grid-column: 2;
+  font-size: 12px;
+  margin: 18px 0 0 5px;
+  height: 30px;
+  width: 120px;
+}
+#clear-message{
+  grid-column: 3;
+  font-size: 12px;
+  margin: 18px 0 0 5px;
+  height: 30px;
+  width: 120px;
+}

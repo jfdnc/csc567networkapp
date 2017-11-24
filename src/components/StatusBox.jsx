@@ -10,7 +10,7 @@ export default class StatusBox extends React.Component{
     this.state = {
       currAssignment: DisplayStore.getCurrAssignment(),
       activeTab: 'network',
-      messages: MessageStore.getMessageState().messages,
+      messageState: MessageStore.getMessageState(),
       currStatus: props.status,
       prevStatus: props.status
     }
@@ -23,7 +23,7 @@ export default class StatusBox extends React.Component{
 
   componentWillMount(){
     MessageStore.on('change', ()=> {
-      this.setState({messages: MessageStore.getMessageState().messages})
+      this.setState({messageState: MessageStore.getMessageState()})
     })
     DisplayStore.on('change', ()=> {
       this.setState({currAssignment: DisplayStore.getCurrAssignment()})
@@ -101,21 +101,27 @@ export default class StatusBox extends React.Component{
     }
   }
 
-  generateMessageList(list){
-    if(list.length == 0 ){
+  generateMessageList(msgCount){
+    console.log(this.state)
+    if(msgCount == 0 ){
       return false
+    } else if(msgCount == 1){
+      return(
+        <ul>
+          <li className='message-list-item'>
+            <b style={{color:'blue'}}>{this.state.messageState.messages.blueMsg}</b>
+          </li>
+        </ul>
+      )
     } else {
       return(
         <ul>
-          {
-            list.map((message,i)=>{
-              return(
-                <li key={i} className='message-list-item'>
-                  {message.id}
-                </li>
-              )
-            })
-          }
+          <li className='message-list-item'>
+            <b style={{color:'blue'}}>{this.state.messageState.messages.blueMsg}</b>
+          </li>
+          <li className='message-list-item'>
+            <b style={{color:'red'}}>{this.state.messageState.messages.redMsg}</b>
+          </li>
         </ul>
       )
     }
@@ -193,7 +199,7 @@ export default class StatusBox extends React.Component{
              <div style={{fontSize:'12px'}}>System Messages</div>
              <hr/>
              <div id='message-list'>
-              {this.generateMessageList(this.state.messages) || 'No messages in system'}
+              {this.generateMessageList(this.state.messageState.count) || 'No messages in system'}
              </div>
         </div>
       </div>

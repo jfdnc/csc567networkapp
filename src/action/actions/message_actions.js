@@ -8,3 +8,10 @@ export function addMessage(newMessage){
     message: newMessage,
   })
 }
+
+export function clearMessages(){
+  dispatcher.dispatch({
+    //only use actions from ActionTypes - consistent communication!
+    type: MessageActionTypes.CLEAR_MESSAGES
+  })
+}
