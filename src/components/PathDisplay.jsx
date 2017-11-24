@@ -8,7 +8,8 @@ export default class PathDisplay extends React.Component{
 
     this.state = {
       ...props,
-      pathList: props.pathList,
+      pathList: '',
+      pathSummary: ''
     }
 
     this.handleClick = this.handleClick.bind(this)
@@ -23,15 +24,45 @@ export default class PathDisplay extends React.Component{
 
   handleClick(){
     //do this on mount based on assignment
-    for(let i=1; i<201; i++){
+    let loops = 50,
+        delta = 150
+    for(let i=1; i<loops+1; i++){
       setTimeout(() => {
         let thisAssignment = DisplayStore.getCurrAssignment()
         let thisAdjMatrix = this.constructAdjacencyMatrix(this.state.nodes,this.state.links)
         let blueInfo = this.shortestPath(thisAdjMatrix,this.state.nodes.length,0,'w1')
         let redInfo = this.shortestPath(thisAdjMatrix,this.state.nodes.length,0,'w2')
         this.outputPaths(blueInfo,redInfo)
-      }, 70*i)
+      }, delta*i)
     }
+    setTimeout(()=> {
+      let pathSummary =
+      <div id='path-display-summary'>
+        <div id='path-display-summary-header'>
+          <b style={{color:'black'}}><u>Summary</u></b>
+        </div>
+        <div id='runs'>
+          <b>Runs:</b> {this.state.pathStats.runs}
+        </div>
+        <div id='red-wins'>
+          <b>Red Wins:</b> <b style={{color:'red'}}>{this.state.pathStats.wins.red}</b>
+        </div>
+        <div id='blue-wins'>
+          <b>Blue Wins:</b> <b style={{color:'blue'}}>{this.state.pathStats.wins.blue}</b>
+        </div>
+        <div id='ties'>
+          <b>Ties:</b> <b style={{color:'purple'}}>{this.state.pathStats.wins.tie}</b>
+        </div>
+        <div id='red-avg'>
+          <b>Red Avg:</b> <b style={{color:'red'}}>{this.state.pathStats.avgPathWeight.red.toFixed(2)}</b>
+        </div>
+        <div id='blue-avg'>
+          <b>Blue Avg:</b> <b style={{color:'blue'}}>{this.state.pathStats.avgPathWeight.blue.toFixed(2)}</b>
+        </div>
+      </div>
+
+      this.setState({pathSummary:pathSummary})
+    },loops*delta)
   }
 
   constructAdjacencyMatrix(nodes, links){
@@ -218,6 +249,8 @@ constructPath(shortestPathInfo, endVertex) {
         <a id='path-calc-btn' onClick={() => this.handleClick()}> Calculate</a>
         <div id='path-list-container'>
           {this.state.pathList}
+            <hr/>
+          {this.state.pathSummary}
         </div>
       </div>
     )

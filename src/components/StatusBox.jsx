@@ -168,26 +168,6 @@ export default class StatusBox extends React.Component{
               </div>
               <div id='path-display-container'>
                 <PathDisplay {...this.props.status}/>
-                <div id='path-display-summary'>
-                  <div id='runs'>
-                    Runs: {this.state.currStatus.pathStats.runs}
-                  </div>
-                  <div id='red-wins'>
-                    Red Wins: {this.state.currStatus.pathStats.wins.red}
-                  </div>
-                  <div id='blue-wins'>
-                    Blue Wins: {this.state.currStatus.pathStats.wins.blue}
-                  </div>
-                  <div id='ties'>
-                    Ties: {this.state.currStatus.pathStats.wins.tie}
-                  </div>
-                  <div id='red-avg'>
-                    Red Avg: {this.state.currStatus.pathStats.avgPathWeight.red}
-                  </div>
-                  <div id='blue-avg'>
-                    Blue Avg: {this.state.currStatus.pathStats.avgPathWeight.blue}
-                  </div>
-                </div>
               </div>
             </div>
             <div className={`${activeTab == 'message' ? 'active' : 'inactive'}`}
