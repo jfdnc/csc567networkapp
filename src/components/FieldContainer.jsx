@@ -26,7 +26,7 @@ export default class FieldContainer extends Component{
     return(
       <div id='field-container'>
         <StatusBox status={this.state}/>
-        <LinkLayer />
+        <LinkLayer {...this.state}/>
         <NodeField status={this.state}/>
         <Button floating fab='horizontal' icon='more_horiz' className={btnClr} large style={{bottom: '45px', right: '24px'}}>
         	<Button floating icon='navigate_before' className={btnClr}/>

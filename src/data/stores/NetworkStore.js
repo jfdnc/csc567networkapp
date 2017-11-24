@@ -11,7 +11,19 @@ class NetworkStore extends EventEmitter {
     this.networkState = {
       nodes: [],
       nodeLocations: [],
-      links: []
+      links: [],
+      pathStats: {
+        runs: 0,
+        avgPathWeight: {
+          red:  0,
+          blue: 0
+        },
+        wins: {
+          red:  0,
+          blue: 0,
+          tie: 0
+        }
+      }
     }
   }
 
@@ -96,7 +108,6 @@ class NetworkStore extends EventEmitter {
         }
       }
     }
-    console.log(combinedRed)
 
     let coloredLinks = this.networkState.links.map((link,i) => {
       let linkColor = combinedRed[i] && combinedBlue[i] ? 'purple' : combinedBlue[i] ? 'blue' : combinedRed[i] ? 'red' : '#000'
@@ -114,6 +125,30 @@ class NetworkStore extends EventEmitter {
     this.emit('change')
   }
 
+  setPathStats(newPathStats){
+    this.networkState.pathStats = newPathStats
+  }
+
+  getPathStats(){
+    return this.networkState.pathStats
+  }
+
+  resetPathStats(){
+    this.networkState.pathStats =
+    {
+      runs: 0,
+      avgPathWeight: {
+        red:  0,
+        blue: 0
+      },
+      wins: {
+        red:  0,
+        blue: 0,
+        tie: 0
+      }
+    }
+  }
+
   addNodeLocation(newNodeLocation){
     this.networkState.nodeLocations.push(newNodeLocation)
     this.emit('change')
@@ -123,7 +158,19 @@ class NetworkStore extends EventEmitter {
     this.networkState = {
       nodes: [],
       nodeLocations: [],
-      links:[]
+      links:[],
+      pathStats: {
+        runs: 0,
+        avgPathWeight: {
+          red:  0,
+          blue: 0
+        },
+        wins: {
+          red:  0,
+          blue: 0,
+          tie: 0
+        }
+      }
     }
     this.emit('change')
   }
@@ -141,6 +188,12 @@ class NetworkStore extends EventEmitter {
         break
       case 'UPDATE_WEIGHTS':
         this.updateWeights()
+        break
+      case 'SET_PATH_STATS':
+        this.setPathStats(action.newPathStats)
+        break
+      case 'RESET_PATH_STATS':
+        this.resetPathStats()
         break
       case 'ADD_COLORS':
         this.addColors(action.hotLinks)

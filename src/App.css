@@ -195,10 +195,38 @@ body{
 #path-display-container{
   grid-column: 5/11;
   overflow: scroll;
+  display: grid;
+  grid-template-rows: auto auto;
 }
 #path-display{
+  grid-row: 1;
   font-size: 13px;
+  min-height: 100px;
   overflow: scroll;
+}
+#path-display-summary{
+  grid-row: 2;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  font-size: 10px;
+}
+#runs{
+  grid-column: 1;
+}
+#red-wins{
+  grid-column: 2;
+}
+#blue-wins{
+  grid-column: 3;
+}
+#ties{
+  grid-column: 4;
+}
+#red-avg{
+  grid-column: 5;
+}
+#blue-avg{
+  grid-column: 6;
 }
 #path-list-container{
   overflow: scroll;

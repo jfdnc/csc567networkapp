@@ -40,6 +40,20 @@ export function addColors(hotLinks){
   })
 }
 
+export function setPathStats(newPathStats){
+  dispatcher.dispatch({
+    //only use actions from ActionTypes - consistent communication!
+    type: NetworkActionTypes.SET_PATH_STATS,
+    newPathStats: newPathStats
+  })
+}
+export function resetPathStats(){
+  dispatcher.dispatch({
+    //only use actions from ActionTypes - consistent communication!
+    type: NetworkActionTypes.RESET_PATH_STATS
+  })
+}
+
 export function clearState(){
   dispatcher.dispatch({
     //only use actions from ActionTypes - consistent communication!

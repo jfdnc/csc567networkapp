@@ -10,7 +10,9 @@ export default class StatusBox extends React.Component{
     this.state = {
       currAssignment: DisplayStore.getCurrAssignment(),
       activeTab: 'network',
-      messages: MessageStore.getMessageState().messages
+      messages: MessageStore.getMessageState().messages,
+      currStatus: props.status,
+      prevStatus: props.status
     }
 
     this.handleClick = this.handleClick.bind(this)
@@ -26,6 +28,10 @@ export default class StatusBox extends React.Component{
     DisplayStore.on('change', ()=> {
       this.setState({currAssignment: DisplayStore.getCurrAssignment()})
     })
+  }
+
+  componentWillReceiveProps(nextProps){
+    this.setState({currStatus:nextProps.status, prevStatus:this.state.currStatus})
   }
 
   handleClick(tab){
@@ -116,7 +122,7 @@ export default class StatusBox extends React.Component{
   }
 
   render(){
-    let netStat = this.props.status
+    let netStat = this.state.prevStatus
     let activeTab = this.state.activeTab
     return(
       <div id='status-box'>
@@ -161,7 +167,27 @@ export default class StatusBox extends React.Component{
               </ul>
               </div>
               <div id='path-display-container'>
-                <PathDisplay />
+                <PathDisplay {...this.props.status}/>
+                <div id='path-display-summary'>
+                  <div id='runs'>
+                    Runs: {this.state.currStatus.pathStats.runs}
+                  </div>
+                  <div id='red-wins'>
+                    Red Wins: {this.state.currStatus.pathStats.wins.red}
+                  </div>
+                  <div id='blue-wins'>
+                    Blue Wins: {this.state.currStatus.pathStats.wins.blue}
+                  </div>
+                  <div id='ties'>
+                    Ties: {this.state.currStatus.pathStats.wins.tie}
+                  </div>
+                  <div id='red-avg'>
+                    Red Avg: {this.state.currStatus.pathStats.avgPathWeight.red}
+                  </div>
+                  <div id='blue-avg'>
+                    Blue Avg: {this.state.currStatus.pathStats.avgPathWeight.blue}
+                  </div>
+                </div>
               </div>
             </div>
             <div className={`${activeTab == 'message' ? 'active' : 'inactive'}`}

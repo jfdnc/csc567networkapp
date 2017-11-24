@@ -1,15 +1,14 @@
 import React from 'react'
-import NetworkStore from '../data/stores/NetworkStore'
 import DisplayStore from '../data/stores/DisplayStore'
-import { addColors } from '../action/actions/network_actions'
+import { addColors, setPathStats, resetPathStats } from '../action/actions/network_actions'
 
 export default class PathDisplay extends React.Component{
   constructor(props){
     super(props)
 
     this.state = {
-      ...NetworkStore.getNetworkState(),
-      pathList: props.pathList
+      ...props,
+      pathList: props.pathList,
     }
 
     this.handleClick = this.handleClick.bind(this)
@@ -18,19 +17,21 @@ export default class PathDisplay extends React.Component{
     this.outputPaths = this.outputPaths.bind(this)
   }
 
-  componentWillMount(){
-    NetworkStore.on('change', () => {
-    this.setState({...NetworkStore.getNetworkState()})
-    })
+  componentWillReceiveProps(newProps){
+    this.setState({...newProps,pathList:this.state.pathList})
   }
 
   handleClick(){
     //do this on mount based on assignment
-    let thisAssignment = DisplayStore.getCurrAssignment()
-    let thisAdjMatrix = this.constructAdjacencyMatrix(this.state.nodes,this.state.links)
-    let blueInfo = this.shortestPath(thisAdjMatrix,this.state.nodes.length,0,'w1')
-    let redInfo = this.shortestPath(thisAdjMatrix,this.state.nodes.length,0,'w2')
-    this.outputPaths(blueInfo,redInfo)
+    for(let i=1; i<201; i++){
+      setTimeout(() => {
+        let thisAssignment = DisplayStore.getCurrAssignment()
+        let thisAdjMatrix = this.constructAdjacencyMatrix(this.state.nodes,this.state.links)
+        let blueInfo = this.shortestPath(thisAdjMatrix,this.state.nodes.length,0,'w1')
+        let redInfo = this.shortestPath(thisAdjMatrix,this.state.nodes.length,0,'w2')
+        this.outputPaths(blueInfo,redInfo)
+      }, 70*i)
+    }
   }
 
   constructAdjacencyMatrix(nodes, links){
@@ -139,7 +140,8 @@ constructPath(shortestPathInfo, endVertex) {
     let nodeColorArgs = {red:[],blue:[]}
     //todo switch red path for particular assignment - a2
     let currStep = 'host0'
-    let totalWeight = 0
+    let totalBlueWeight = 0
+    let totalRedWeight = 0
     let newPathList =
       <div id='path-list'>
       <div id='blue-path-list'>
@@ -149,36 +151,63 @@ constructPath(shortestPathInfo, endVertex) {
             let thisWeight = this.state.links.filter(link => link.links.from === currStep && link.links.to === step)[0].w1
             nodeColorArgs.blue.push({from:currStep,to:step})
             let listOut = <li key={i}>{currStep} to {step} => weight: <b style={{'color':'blue'}}>{thisWeight}</b></li>
-            totalWeight += thisWeight
+            totalBlueWeight += thisWeight
             currStep = step
             return(
               listOut
             )
           })}
-          <li><b>Total Minimum Path Weight:</b> <b style={{'color':'blue'}}>{totalWeight}</b></li>
+          <li><b>Total Minimum Path Weight:</b> <b style={{'color':'blue'}}>{totalBlueWeight}</b></li>
         </ul>
         </div>
         <div id='red-path-list'>
         <h6 style={{'color':'red'}}>Red Path <b style={{fontSize:'12px',color:'black'}}> to host1</b></h6>
         <ul style={{marginTop:'0px'}}>
           {spRedNames.map((step,i) => {
-            if(i == 0){currStep = 'host0'; totalWeight = 0;}
+            if(i == 0){currStep = 'host0';}
             let thisWeight = this.state.links.filter(link => link.links.from === currStep && link.links.to === step)[0].w2
             nodeColorArgs.red.push({from:currStep,to:step})
             let listOut = <li key={i}>{currStep} to {step} => weight: <b style={{'color':'red'}}>{thisWeight}</b></li>
-            totalWeight += thisWeight
+            totalRedWeight += thisWeight
             currStep = step
             return(
               listOut
             )
           })}
-          <li><b>Total Minimum Path Weight:</b> <b style={{'color':'red'}}>{totalWeight}</b></li>
+          <li><b>Total Minimum Path Weight:</b> <b style={{'color':'red'}}>{totalRedWeight}</b></li>
         </ul>
         </div>
       </div>
-      
+
+      let prevPathStats = this.state.pathStats
+      let prevRedAvg = prevPathStats.avgPathWeight.red,
+          prevBlueAvg = prevPathStats.avgPathWeight.blue,
+          prevRuns = prevPathStats.runs
+      let newRedAvg =  prevRedAvg ? prevRedAvg*(((totalRedWeight/prevRedAvg)+prevRuns)/(++prevRuns))
+                                  : totalRedWeight,
+          newBlueAvg = prevBlueAvg ? prevBlueAvg*(((totalBlueWeight/prevBlueAvg)+prevRuns)/(++prevRuns))
+                                   : totalBlueWeight
+      let newPathStats =
+        {
+          runs: prevPathStats.runs + 1,
+          avgPathWeight: {
+            red: newRedAvg,
+            blue: newBlueAvg
+          },
+          wins: {
+            red: totalRedWeight < totalBlueWeight ? ++prevPathStats.wins.red : prevPathStats.wins.red,
+            blue: totalBlueWeight < totalRedWeight ? ++prevPathStats.wins.blue : prevPathStats.wins.blue,
+            tie: totalRedWeight === totalBlueWeight ? ++prevPathStats.wins.tie : prevPathStats.wins.tie
+          }
+        }
+
+      setPathStats(newPathStats)
       addColors(nodeColorArgs)
-      this.setState({pathList: newPathList})
+      this.setState(
+        {
+          pathList: newPathList,
+        }
+      )
   }
 
 

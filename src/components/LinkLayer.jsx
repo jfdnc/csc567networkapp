@@ -17,16 +17,15 @@ export default class LinkLayer extends React.Component{
     this.clearLinks = this.clearLinks.bind(this)
   }
 
-  componentDidMount(){
-    NetworkStore.on('change', () => {
-      let newState = NetworkStore.getNetworkState()
-      this.setState({
-        nodes: newState.nodes,
-        links: newState.links,
-        svgs: this.mapLinks(newState.nodes, newState.links)
-      })
+  componentWillReceiveProps(newProps){
+    this.setState({
+      nodes: newProps.nodes,
+      links: newProps.links,
+      svgs: this.mapLinks(newProps.nodes, newProps.links)
     })
+  }
 
+  componentDidMount(){
     DisplayStore.on('change', () => {
       if(DisplayStore.getCurrAssignment() == 'default'){
         this.clearLinks()
