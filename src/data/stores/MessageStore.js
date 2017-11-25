@@ -3,32 +3,28 @@ import dispatcher from '../Dispatcher'
 //for emitting events to UI components concerned with this store
 import { EventEmitter } from 'events'
 import _ from 'lodash'
+import NetworkStore from './NetworkStore'
 
 class MessageStore extends EventEmitter {
   constructor(props){
     super(props)
 
-    //initial message info
-    /**
-    *
-    *
-    messages = [
-      {
-        id: ''
-        node: ''
-        layer: ''
-        contents: ''
-      }
-      ]
-    *
-    *
-    *
-    *
-    **/
     this.messageState = {
       messages: {
-        redMsg: '',
-        blueMsg: ''
+        blue: {
+          content: '',
+          node: '',
+          layer: '',
+        },
+        red: {
+          content: '',
+          node: '',
+          layer: ''
+        }
+      },
+      paths: {
+        blue:[],
+        red:[]
       },
       count: 0
     }
@@ -43,30 +39,55 @@ class MessageStore extends EventEmitter {
   }
 
   addMessage(newMessage){
-    console.log(`pushing ${newMessage}`)
     switch(this.messageState.count){
       case 0:
-        console.log(`pushing blue msg: ${newMessage}`)
-        this.messageState.messages.blueMsg = newMessage
-        this.messageState.count += 1
-        this.emit('change')
+        let bluePath = NetworkStore.getNetworkState().pathStats.currPath.blue
+        if(bluePath.length){
+          console.log(`pushing blue msg: ${newMessage}`)
+          this.messageState.paths.blue = bluePath
+          this.messageState.messages.blue.content = newMessage
+          this.messageState.messages.blue.node = bluePath[0].from
+          this.messageState.count += 1
+          this.emit('change')
+        } else {
+          console.log('No paths calculated.')
+        }
         break
       case 1:
-      console.log(`pushing red msg: ${newMessage}`)
-        this.messageState.messages.redMsg = newMessage
-        this.messageState.count += 1
-        this.emit('change')
+        let redPath = NetworkStore.getNetworkState().pathStats.currPath.red
+        if(redPath.length){
+          console.log(`pushing red msg: ${newMessage}`)
+          this.messageState.paths.red = redPath
+            this.messageState.messages.red.content = newMessage
+            this.messageState.messages.red.node = redPath[0].from
+            this.messageState.count += 1
+            this.emit('change')
+          } else {
+            console.log('No paths calculated.')
+          }
         break
       default:
-        console.log('Message queue full')
+        console.log('Message queue full.')
     }
   }
 
   clearMessages(){
     this.messageState = {
       messages: {
-        redMsg: '',
-        blueMsg: ''
+        blue: {
+          content: '',
+          node: '',
+          layer: '',
+        },
+        red: {
+          content: '',
+          node: '',
+          layer: ''
+        }
+      },
+      paths: {
+        blue: [],
+        red: []
       },
       count: 0
     }

@@ -3,6 +3,7 @@ import { Navbar, NavItem, Dropdown, Button, Row, Col } from 'react-materialize'
 import { displayDefault, displayA1, displayA2, displayA3 } from '../action/actions/display_actions'
 import { clearState, updateWeights } from '../action/actions/network_actions'
 import NetworkStore from '../data/stores/NetworkStore'
+import MessageStore from '../data/stores/MessageStore'
 import DisplayStore from '../data/stores/DisplayStore'
 
 export default class AppNav extends Component{
@@ -66,7 +67,7 @@ export default class AppNav extends Component{
               <Button onClick={() => updateWeights()}>Reload Nodes</Button>
             </Col>
             <Col sm={2}>
-              <Button onClick={() => console.log(NetworkStore.getNetworkState())}>log state to console</Button>
+              <Button onClick={() => console.log(NetworkStore.getNetworkState(),MessageStore.getMessageState())}>log state to console</Button>
             </Col>
           </Row>
         </Navbar>

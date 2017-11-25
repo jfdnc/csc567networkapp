@@ -25,6 +25,12 @@ export function displayA3(){
     type: DisplayActionTypes.DISPLAY_A3
   })
 }
+export function toggleReveal(){
+  dispatcher.dispatch({
+    //only use actions from ActionTypes - consistent communication!
+    type: DisplayActionTypes.TOGGLE_REVEAL
+  })
+}
 export function setReveal(reveal){
   dispatcher.dispatch({
     //only use actions from ActionTypes - consistent communication!

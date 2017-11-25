@@ -3,6 +3,8 @@ import DisplayStore from '../data/stores/DisplayStore'
 import { addColors, setPathStats, resetPathStats } from '../action/actions/network_actions'
 import { Preloader } from 'react-materialize'
 
+//let d3 = require('d3')
+
 export default class PathDisplay extends React.Component{
   constructor(props){
     super(props)
@@ -25,7 +27,7 @@ export default class PathDisplay extends React.Component{
 
   handleClick(numLoops){
     let loops = numLoops,
-        delta = loops == 1 ? 0 : 250
+        delta = loops == 1 ? 0 : loops == 50 ? 250 : 100
     for(let i=1; i<loops+1; i++){
       setTimeout(() => {
         let thisAdjMatrix = this.constructAdjacencyMatrix(this.state.nodes,this.state.links)
@@ -53,10 +55,13 @@ export default class PathDisplay extends React.Component{
           <b>Ties:</b> <b style={{color:'purple'}}>{this.state.pathStats.wins.tie}</b>
         </div>
         <div id='red-avg'>
-          <b>Red Avg:</b> <b style={{color:'red'}}>{this.state.pathStats.avgPathWeight.red.toFixed(2)}</b>
+          <b>Red Path Avg:</b> <b style={{color:'red'}}>{this.state.pathStats.avgPathWeight.red.toFixed(2)}</b>
         </div>
         <div id='blue-avg'>
-          <b>Blue Avg:</b> <b style={{color:'blue'}}>{this.state.pathStats.avgPathWeight.blue.toFixed(2)}</b>
+          <b>Blue Path Avg:</b> <b style={{color:'blue'}}>{this.state.pathStats.avgPathWeight.blue.toFixed(2)}</b>
+        </div>
+        <div id='path-display-summary-graph'>
+          <svg width="100%" height="140"></svg>
         </div>
       </div>
 
@@ -100,7 +105,6 @@ export default class PathDisplay extends React.Component{
                   )
                 })
     return(adjMatrix)
-
   }
 
   shortestPath(edges, numVertices, startVertex, wNum) {
@@ -116,30 +120,28 @@ export default class PathDisplay extends React.Component{
               )
             })
 
-    var done = new Array(numVertices)
+    let [ done, pathLengths, predecessors ]  = [new Array(numVertices),new Array(numVertices),new Array(numVertices)]
     done[startVertex] = true
-    var pathLengths = new Array(numVertices)
-    var predecessors = new Array(numVertices)
-    for (var i = 0; i < numVertices; i++) {
+    for (let i = 0; i < numVertices; i++) {
       pathLengths[i] = edges[startVertex][i]
-      if (edges[startVertex][i][wNum] != Infinity) {
+      if (pathLengths[i] != Infinity) {
         predecessors[i] = startVertex;
       }
     }
     pathLengths[startVertex] = 0;
-    for (var i = 0; i < numVertices - 1; i++) {
-      var closest = -1
-      var closestDistance = Infinity
-      for (var j = 0; j < numVertices; j++) {
+    for (let i = 0; i < numVertices - 1; i++) {
+      let closest = -1
+      let closestDistance = Infinity
+      for (let j = 0; j < numVertices; j++) {
         if (!done[j] && pathLengths[j] < closestDistance) {
           closestDistance = pathLengths[j];
           closest = j;
         }
       }
       done[closest] = true;
-      for (var j = 0; j < numVertices; j++) {
+      for (let j = 0; j < numVertices; j++) {
         if (!done[j]) {
-          var possiblyCloserDistance = pathLengths[closest] + edges[closest][j];
+          let possiblyCloserDistance = pathLengths[closest] + edges[closest][j];
           if (possiblyCloserDistance < pathLengths[j]) {
             pathLengths[j] = possiblyCloserDistance;
             predecessors[j] = closest;
@@ -250,8 +252,9 @@ constructPath(shortestPathInfo, endVertex) {
     return(
       <div id='path-display'>
         <b style={{color:'black'}}>Shortest Paths from Host0:</b>
-        <a id='path-calc-btn' onClick={() => this.handleClick(50)}> <u>Calculate 50</u></a>
         <a id='path-calc-btn' onClick={() => this.handleClick(1)}> <u>Calculate 1</u></a>
+        <a id='path-calc-btn' onClick={() => this.handleClick(50)}> <u>Calculate 50</u></a>
+        <a id='path-calc-btn' onClick={() => this.handleClick(100)}> <u>Calculate 100</u></a>
         <div id='path-list-container'>
           {this.state.pathList}
             <hr/>

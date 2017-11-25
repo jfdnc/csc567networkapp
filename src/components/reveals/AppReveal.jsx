@@ -7,24 +7,31 @@ export default class AppReveal extends React.Component {
     super(props)
 
     this.state = {
-      ...NetworkStore.getNetworkState().pathStats.currPath
+      paths:{
+        ...NetworkStore.getNetworkState().pathStats.currPath
+      },
+      locations:{
+        ...NetworkStore.getNetworkState().nodeLocations
+      }
     }
 
     this.handleClick = this.handleClick.bind(this)
   }
 
   handleClick(type){
+    let input = document.getElementById('message-input')
     if(type === 'add'){
-      addMessage('cats')
+      if(input.value.length){addMessage(input.value)}
+      input.value = ''
     } else if (type === 'del') {
       clearMessages()
+      input.value = ''
     } else {
       console.log('error adding/deleting message')
     }
   }
 
   render(){
-    console.log(this.state)
     return(
       <div className='layer-reveal-content-wrap'>
         <div className='layer-reveal-content-header'>Application Layer</div>

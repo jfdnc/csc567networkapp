@@ -1,26 +1,19 @@
 import React from 'react'
 import { Button } from 'react-materialize'
-import { setReveal } from '../action/actions/display_actions'
+import { toggleReveal, setReveal } from '../action/actions/display_actions'
+import DisplayStore from '../data/stores/DisplayStore'
 
 export default class OSILayer extends React.Component {
   constructor(props){
     super(props)
 
-    this.state = {
-      layerOpen: false
-    }
-
     this.handleClick = this.handleClick.bind(this)
   }
 
   handleClick(layer){
-    let newState
-    let prevReveal = this.props.currRevealDisplayed
-    if(prevReveal === layer){
-      newState = false
-    } else {
-      newState = true
-    }
+    toggleReveal()
+    let newState = DisplayStore.revealToggled()
+
     setReveal(layer)
 
     let parentDiv = document.getElementById(this.props.parent),
@@ -37,16 +30,16 @@ export default class OSILayer extends React.Component {
     } else {
       parentDiv.style = 'transform: translateX(0)'
       revealDiv.style = 'width: 0px; visibility: hidden'
+      let allLayers = document.getElementsByClassName('osi-layer')
+      for(let i=0; i<allLayers.length; i++){
+        allLayers[i].style = 'color: #2e5d67;'
+      }
     }
-
-    this.setState({
-      layerOpen: newState
-    })
   }
 
   render(){
     return(
-      <Button id={`${this.props.layer}-layer`} className='osi-layer' onClick={() => this.handleClick(this.props.layer)}>
+      <Button id={`${this.props.layer}-layer`} className='osi-layer' onMouseOver={(e) => this.props.onMouseOver(e)} onClick={() => this.handleClick(this.props.layer)}>
         {this.props.layer}
       </Button>
     )

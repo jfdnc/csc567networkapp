@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import MessageStore from '../data/stores/MessageStore'
 import DisplayStore from '../data/stores/DisplayStore'
 import PathDisplay from './PathDisplay'
+import { Button } from 'react-materialize'
 
 export default class StatusBox extends React.Component{
   constructor(props){
@@ -19,10 +20,17 @@ export default class StatusBox extends React.Component{
     this.handleMouseOver = this.handleMouseOver.bind(this)
     this.handleMouseOut = this.handleMouseOut.bind(this)
     this.generateMessageList = this.generateMessageList.bind(this)
+    this.sendMessages = this.sendMessages.bind(this)
+    this.calculateHop = this.calculateHop.bind(this)
   }
 
   componentWillMount(){
     MessageStore.on('change', ()=> {
+      if(MessageStore.getMessageState().count > 0){
+        document.getElementById('submit-message-button').style = 'pointer-events: auto;color:#2e5d67;background:#bfd2d1;'
+      } else {
+        document.getElementById('submit-message-button').style = 'pointer-events: none;color:#cdcdcd;background:#898989;'
+      }
       this.setState({messageState: MessageStore.getMessageState()})
     })
     DisplayStore.on('change', ()=> {
@@ -102,14 +110,13 @@ export default class StatusBox extends React.Component{
   }
 
   generateMessageList(msgCount){
-    console.log(this.state)
     if(msgCount == 0 ){
       return false
     } else if(msgCount == 1){
       return(
         <ul>
           <li className='message-list-item'>
-            <b style={{color:'blue'}}>{this.state.messageState.messages.blueMsg}</b>
+            <b style={{color:'blue'}}>{this.state.messageState.messages.blue.content}</b>
           </li>
         </ul>
       )
@@ -117,13 +124,53 @@ export default class StatusBox extends React.Component{
       return(
         <ul>
           <li className='message-list-item'>
-            <b style={{color:'blue'}}>{this.state.messageState.messages.blueMsg}</b>
+            <b style={{color:'blue'}}>{this.state.messageState.messages.blue.content}</b>
           </li>
           <li className='message-list-item'>
-            <b style={{color:'red'}}>{this.state.messageState.messages.redMsg}</b>
+            <b style={{color:'red'}}>{this.state.messageState.messages.red.content}</b>
           </li>
         </ul>
       )
+    }
+  }
+
+  sendMessages(){
+    document.getElementById('submit-message-button').style = 'pointer-events: none;color: #cdcdcd;background: #898989;'
+    let mState = Object.assign({},this.state.messageState)
+    let assignment = this.state.currAssignment
+
+    for(let i=0; i<mState.count; i++){
+      let color = Object.keys(mState.messages)[i]
+      let thisState = Object.assign({},
+        mState.messages[color],
+        {path:mState.paths[color]}
+      )
+      let waitTime = 0
+      let thisTransitTime = 0
+      for(let i=0; i<thisState.path.length; i++){
+        thisTransitTime = thisState.path[i].weight
+        let dels = this.calculateHop(thisState.path[i])
+        let thisMessage = document.getElementById(`new-message-div-${color}`)
+        setTimeout(() => {
+          thisMessage.style.transition = `transform ${thisState.path[i].weight}s linear`
+          thisMessage.style.transform += `translate(${dels.delX}px,${dels.delY}px)`
+        }, waitTime)
+        waitTime += 1000*thisTransitTime
+      }
+    }
+  }
+
+  calculateHop(pathState){
+    console.log(pathState.from, pathState.to, pathState.weight)
+    let from = document.getElementById(`${pathState.from}-${this.state.currAssignment}`).getBoundingClientRect()
+    let to = document.getElementById(`${pathState.to}-${this.state.currAssignment}`).getBoundingClientRect()
+
+    let delX = to.x - from.x
+    let delY = to.y - from.y
+
+    return {
+      delX: delX.toFixed(2),
+      delY: delY.toFixed(2)
     }
   }
 
@@ -196,11 +243,13 @@ export default class StatusBox extends React.Component{
         </div>
         <div className={`${activeTab == 'message' ? 'active' : 'inactive'}`}
              id='message-list-container'>
-             <div style={{fontSize:'12px'}}>System Messages</div>
+             <div style={{fontSize:'12px'}}>System Messages
              <hr/>
+             </div>
              <div id='message-list'>
               {this.generateMessageList(this.state.messageState.count) || 'No messages in system'}
              </div>
+             <Button id='submit-message-button' onClick = {() => this.sendMessages()}>Send</Button>
         </div>
       </div>
     )

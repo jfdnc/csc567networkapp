@@ -10,40 +10,46 @@ class DisplayStore extends EventEmitter {
     //initial log info
     this.displayState = {
       assignmentDisplayed: 'default',
-      revealDisplayed: ''
+      revealDisplayed: '',
+      revealToggled: false
     }
   }
 
+  getAll(){
+    return this.displayState
+  }
+
+  revealToggled(){
+    return this.displayState.revealToggled
+  }
+
   displayDefault(){
-    this.displayState = {
-      assignmentDisplayed: 'default'
-    }
+    this.displayState = Object.assign(this.displayState,{assignmentDisplayed:'default'})
     this.emit("change")
   }
 
   displayA1(){
-    this.displayState = {
-      assignmentDisplayed: 'a1'
-    }
+    this.displayState = Object.assign(this.displayState, {assignmentDisplayed:'a1'})
     this.emit("change")
   }
 
   displayA2(){
-    this.displayState = {
-      assignmentDisplayed: 'a2'
-    }
+    this.displayState = Object.assign(this.displayState, {assignmentDisplayed:'a2'})
     this.emit("change")
   }
 
   displayA3(){
-    this.displayState = {
-      assignmentDisplayed: 'a3'
-    }
+    this.displayState = Object.assign(this.displayState, {assignmentDisplayed:'a3'})
     this.emit("change")
   }
 
+  toggleReveal(){
+    this.displayState = Object.assign(this.displayState,{revealToggled:!this.displayState.revealToggled})
+    this.emit('change')
+  }
+
   setReveal(reveal){
-    this.displayState.revealDisplayed = reveal
+    this.displayState = Object.assign(this.displayState,{revealDisplayed:reveal})
     this.emit('change')
   }
 
@@ -72,6 +78,9 @@ class DisplayStore extends EventEmitter {
         break
       case 'DISPLAY_A3':
         this.displayA3()
+        break
+      case 'TOGGLE_REVEAL':
+        this.toggleReveal()
         break
       case 'SET_REVEAL':
         this.setReveal(action.reveal)
