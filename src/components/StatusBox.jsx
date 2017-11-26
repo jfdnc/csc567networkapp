@@ -153,14 +153,14 @@ export default class StatusBox extends React.Component{
           let errorPath = {
             from: thisState.path[i].to,
             to: thisState.path[i].from,
-            weight: 1.3,
+            weight: thisState.path[i].weight,
             ackFrame: true,
             errorPath: true
           }
           let returnPath = {
             from: thisState.path[i].from,
             to: thisState.path[i].to,
-            weight: 1,
+            weight: thisState.path[i].weight,
             repeatFrame: true,
             errorPath: true
           }
@@ -178,7 +178,7 @@ export default class StatusBox extends React.Component{
               from: path.to,
               to: path.from,
               hostAckFrame: true,
-              weight: .6,
+              weight: path.weight,
               returningPath: true,
               errorPath: path.errorPath ? true : false
             }
@@ -187,7 +187,7 @@ export default class StatusBox extends React.Component{
 
       revPath = revPath.slice().filter(path => !path.errorPath)
       //speed it up!
-      let weightScale = .6
+      let weightScale = .3
       thisState.path = thisState.path.concat(revPath).map(pathSegment => Object.assign({},pathSegment, {weight:weightScale*pathSegment.weight}))
 
       let waitTime = 0
@@ -218,7 +218,7 @@ export default class StatusBox extends React.Component{
             leavingNode.appendChild(ding)
             setTimeout(() => {
             ding.style = `opacity: 0; transform: translate(${(leavingNode.clientWidth/2)-10}px,-${leavingNode.clientHeight+15}px);`
-          },weightScale*2000)
+          },weightScale*3500)
             thisMessage.style.visibility = 'visibile'
             thisMessage.style.background = 'green'
             thisMessage.style.boxShadow = `0 0 10px 3px ${color}`
