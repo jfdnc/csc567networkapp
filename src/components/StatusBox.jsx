@@ -187,7 +187,7 @@ export default class StatusBox extends React.Component{
 
       revPath = revPath.slice().filter(path => !path.errorPath)
       //speed it up!
-      let weightScale = .3
+      let weightScale = .6
       thisState.path = thisState.path.concat(revPath).map(pathSegment => Object.assign({},pathSegment, {weight:weightScale*pathSegment.weight}))
 
       let waitTime = 0
@@ -197,9 +197,30 @@ export default class StatusBox extends React.Component{
         let dels = this.calculateHop(thisState.path[i])
         let thisMessage = document.getElementById(`new-message-div-${color}`)
         setTimeout(() => {
+          let leavingNode = document.getElementById(`${thisState.path[i].from}-${this.state.currAssignment}`)
+          let ding = document.createElement('div')
+          ding.id = 'ding'
+          ding.style = `transform: translate(${(leavingNode.clientWidth/2)-10}px,-${leavingNode.clientHeight}px); color: yellow;`
           if(thisState.path[i].ackFrame){
+            ding.innerHTML = 'CRC Failed: Sending ACK'
+            leavingNode.appendChild(ding)
+            setTimeout(() => {
+            ding.style = `opacity: 0; transform: translate(${(leavingNode.clientWidth/2)-10}px,-${leavingNode.clientHeight+15}px); color: yellow;`
+          },weightScale*2000)
             thisMessage.style.visibility = 'visibile'
             thisMessage.style.background = 'yellow'
+            thisMessage.style.boxShadow = `0 0 10px 3px ${color}`
+            thisMessage.style.width = '19px'
+            thisMessage.style.height = '19px'
+          } else if(thisState.path[i].hostAckFrame && thisState.path[i].from == 'host1'){
+            ding.innerHTML = `Host 0 <b style="color:${color};">${color}</b> Message Received: Sending ACK`
+            ding.style.color = 'green'
+            leavingNode.appendChild(ding)
+            setTimeout(() => {
+            ding.style = `opacity: 0; transform: translate(${(leavingNode.clientWidth/2)-10}px,-${leavingNode.clientHeight+15}px);`
+          },weightScale*2000)
+            thisMessage.style.visibility = 'visibile'
+            thisMessage.style.background = 'green'
             thisMessage.style.boxShadow = `0 0 10px 3px ${color}`
             thisMessage.style.width = '19px'
             thisMessage.style.height = '19px'
@@ -209,6 +230,18 @@ export default class StatusBox extends React.Component{
             thisMessage.style.boxShadow = `0 0 10px 3px ${color}`
             thisMessage.style.width = '19px'
             thisMessage.style.height = '19px'
+          } else if(thisState.path[i].repeatFrame){
+            ding.innerHTML = `Retransmitting ${color} message`
+            ding.style.color = `${color}`
+            leavingNode.appendChild(ding)
+            setTimeout(() => {
+            ding.style = `opacity: 0; transform: translate(${(leavingNode.clientWidth/2)-10}px,-${leavingNode.clientHeight+15}px);`
+          },weightScale*2000)
+            thisMessage.style.visibility = 'visible'
+            thisMessage.style.background = `${color}`
+            thisMessage.style.boxShadow = '0 0 6px rgba(226,240,24,.7)'
+            thisMessage.style.width = '25px'
+            thisMessage.style.height = '25px'
           } else {
             thisMessage.style.visibility = 'visible'
             thisMessage.style.background = `${color}`
