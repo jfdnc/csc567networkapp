@@ -139,6 +139,16 @@ export default class StatusBox extends React.Component{
     let mState = Object.assign({},this.state.messageState)
     let assignment = this.state.currAssignment
 
+    let [ blueTotal,redTotal ] =
+    [...Object.values(MessageStore.getMessageState().paths)
+      .map(colorArr => colorArr
+        .map(ele => ele.weight).reduce((acc,next) => acc += next)
+      )]
+    let totalWeights = {
+      blue: blueTotal,
+      red: redTotal
+    }
+
     for(let i=0; i<mState.count; i++){
       let color = Object.keys(mState.messages)[i]
       let thisState = Object.assign({},
@@ -146,57 +156,18 @@ export default class StatusBox extends React.Component{
         {path:mState.paths[color]}
       )
 
-      /*for(let i=0; i<thisState.path.length; i++){
-        let randomNum = Math.floor(Math.random()*1000)
-        let faultRange = 500
-        if(randomNum < faultRange && i > 0 && i < thisState.path.length && !thisState.path[i].ackFrame && !thisState.path[i].errorPath && !thisState.path[i-1].ackFrame && !thisState.path[i-1].errorPath){
-          let errorPath = {
-            from: thisState.path[i].to,
-            to: thisState.path[i].from,
-            weight: thisState.path[i].weight,
-            ackFrame: true,
-            errorPath: true
-          }
-          let returnPath = {
-            from: thisState.path[i].from,
-            to: thisState.path[i].to,
-            weight: thisState.path[i].weight,
-            repeatFrame: true,
-            errorPath: true
-          }
-          thisState.path = thisState.path.slice(0,i)
-                                         .concat(thisState.path[i])
-                                         .concat(errorPath)
-                                         .concat(returnPath)
-                                         .concat(thisState.path.slice(i+1))
-        }
-      }
-
-      let revPath = thisState.path.slice().map(path => {
-          return(
-            {
-              from: path.to,
-              to: path.from,
-              hostAckFrame: true,
-              weight: path.weight,
-              returningPath: true,
-              errorPath: path.errorPath ? true : false
-            }
-          )
-      }).reverse()*/
       let errorAdded = false
       for(let i=0; i<thisState.path.length; i++){
         let randomNum = Math.floor(Math.random()*1000)
         let faultRange = 500
         if(!errorAdded && randomNum < faultRange && i > 0 && i < thisState.path.length){
-          console.log('packet DROPPED')
           let errorPath = []
           for(let j=i; j>=0; j--){
             errorPath.push(
               {
                 from: thisState.path[j].to,
                 to: thisState.path[j].from,
-                weight: thisState.path[j].weight,
+                weight: (Math.floor(totalWeights[color]/i)/2),
                 ackFrame: true,
                 errorPath: true,
                 droppedOnFrame: j == i ? true : false
@@ -230,7 +201,7 @@ export default class StatusBox extends React.Component{
               from: path.to,
               to: path.from,
               hostAckFrame: true,
-              weight: path.weight,
+              weight: 1,
               returningPath: true,
               errorPath: path.errorPath ? true : false
             }
@@ -241,6 +212,7 @@ export default class StatusBox extends React.Component{
       //speed it up!
       let weightScale = .3
       thisState.path = thisState.path.concat(revPath).map(pathSegment => Object.assign({},pathSegment, {weight:weightScale*pathSegment.weight}))
+
 
       let waitTime = 0
       let thisTransitTime = 0
