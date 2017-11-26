@@ -142,7 +142,7 @@ export default class StatusBox extends React.Component{
     let [ blueTotal,redTotal ] =
     [...Object.values(MessageStore.getMessageState().paths)
       .map(colorArr => colorArr
-        .map(ele => ele.weight).reduce((acc,next) => acc += next)
+        .map(ele => ele.weight).reduce((acc,next) => acc += next, 0)
       )]
     let totalWeights = {
       blue: blueTotal,
@@ -167,7 +167,7 @@ export default class StatusBox extends React.Component{
               {
                 from: thisState.path[j].to,
                 to: thisState.path[j].from,
-                weight: (Math.floor(totalWeights[color]/i)/2),
+                weight: (Math.floor(1.15*totalWeights[color]/i)/2),
                 ackFrame: true,
                 errorPath: true,
                 droppedOnFrame: j == i ? true : false
