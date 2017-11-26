@@ -321,10 +321,13 @@ body{
 
 /*message div stuff*/
 .new-message-div{
-  width: 35px;
-  height: 35px;
+  width: 25px;
+  height: 25px;
   border-radius: 50%;
   position: absolute;
+  border: 1px solid rgba(0,0,0,0.6);
+  box-shadow: 0 0 6px rgba(226,240,24,.7);
+  z-index: -1;
 }
 .new-message-div:hover{
   opacity: 0.5;

@@ -58,7 +58,7 @@ export default class NodeField extends Component{
       let newMessageDiv = document.createElement('div')
       newMessageDiv.className = 'new-message-div'
       newMessageDiv.id = `new-message-div-${currColor}`
-      newMessageDiv.style = `background-color: ${currColor}; transform: translateY(-${hostNode.clientHeight}px);`
+      newMessageDiv.style = `background-color: ${currColor}; transform: translate(${Math.floor(hostNode.clientWidth/2)-3}px,-${Math.floor(hostNode.clientHeight/2) + 10}px);`
       hostNode.appendChild(newMessageDiv)
     }
   }

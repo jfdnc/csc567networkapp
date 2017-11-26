@@ -145,6 +145,51 @@ export default class StatusBox extends React.Component{
         mState.messages[color],
         {path:mState.paths[color]}
       )
+
+      for(let i=0; i<thisState.path.length; i++){
+        let randomNum = Math.floor(Math.random()*1000)
+        let faultRange = 500
+        if(randomNum < faultRange && i > 0 && i < thisState.path.length && !thisState.path[i].ackFrame && !thisState.path[i].errorPath && !thisState.path[i-1].ackFrame && !thisState.path[i-1].errorPath){
+          let errorPath = {
+            from: thisState.path[i].to,
+            to: thisState.path[i].from,
+            weight: 1.3,
+            ackFrame: true,
+            errorPath: true
+          }
+          let returnPath = {
+            from: thisState.path[i].from,
+            to: thisState.path[i].to,
+            weight: 1,
+            repeatFrame: true,
+            errorPath: true
+          }
+          thisState.path = thisState.path.slice(0,i)
+                                         .concat(thisState.path[i])
+                                         .concat(errorPath)
+                                         .concat(returnPath)
+                                         .concat(thisState.path.slice(i+1))
+        }
+      }
+
+      let revPath = thisState.path.slice().map(path => {
+          return(
+            {
+              from: path.to,
+              to: path.from,
+              hostAckFrame: true,
+              weight: .6,
+              returningPath: true,
+              errorPath: path.errorPath ? true : false
+            }
+          )
+      }).reverse()
+
+      revPath = revPath.slice().filter(path => !path.errorPath)
+      //speed it up!
+      let weightScale = .3
+      thisState.path = thisState.path.concat(revPath).map(pathSegment => Object.assign({},pathSegment, {weight:weightScale*pathSegment.weight}))
+
       let waitTime = 0
       let thisTransitTime = 0
       for(let i=0; i<thisState.path.length; i++){
@@ -152,6 +197,25 @@ export default class StatusBox extends React.Component{
         let dels = this.calculateHop(thisState.path[i])
         let thisMessage = document.getElementById(`new-message-div-${color}`)
         setTimeout(() => {
+          if(thisState.path[i].ackFrame){
+            thisMessage.style.visibility = 'visibile'
+            thisMessage.style.background = 'yellow'
+            thisMessage.style.boxShadow = `0 0 10px 3px ${color}`
+            thisMessage.style.width = '19px'
+            thisMessage.style.height = '19px'
+          } else if(thisState.path[i].hostAckFrame){
+            thisMessage.style.visibility = 'visibile'
+            thisMessage.style.background = 'green'
+            thisMessage.style.boxShadow = `0 0 10px 3px ${color}`
+            thisMessage.style.width = '19px'
+            thisMessage.style.height = '19px'
+          } else {
+            thisMessage.style.visibility = 'visible'
+            thisMessage.style.background = `${color}`
+            thisMessage.style.boxShadow = '0 0 6px rgba(226,240,24,.7)'
+            thisMessage.style.width = '25px'
+            thisMessage.style.height = '25px'
+          }
           thisMessage.style.transition = `transform ${thisState.path[i].weight}s linear`
           thisMessage.style.transform += `translate(${dels.delX}px,${dels.delY}px)`
         }, waitTime)
@@ -161,7 +225,6 @@ export default class StatusBox extends React.Component{
   }
 
   calculateHop(pathState){
-    console.log(pathState.from, pathState.to, pathState.weight)
     let from = document.getElementById(`${pathState.from}-${this.state.currAssignment}`).getBoundingClientRect()
     let to = document.getElementById(`${pathState.to}-${this.state.currAssignment}`).getBoundingClientRect()
 

@@ -27,7 +27,7 @@ export default class PathDisplay extends React.Component{
 
   handleClick(numLoops){
     let loops = numLoops,
-        delta = loops == 1 ? 0 : loops == 50 ? 250 : 100
+        delta = loops == 1 ? 0 : loops == 50 ? 250 : 80
     for(let i=1; i<loops+1; i++){
       setTimeout(() => {
         let thisAdjMatrix = this.constructAdjacencyMatrix(this.state.nodes,this.state.links)
@@ -46,10 +46,10 @@ export default class PathDisplay extends React.Component{
           <b>Runs:</b> {this.state.pathStats.runs}
         </div>
         <div id='red-wins'>
-          <b>Red Wins:</b> <b style={{color:'red'}}>{this.state.pathStats.wins.red}</b>
+          <b>Red Min Path:</b> <b style={{color:'red'}}>{this.state.pathStats.wins.red}</b>
         </div>
         <div id='blue-wins'>
-          <b>Blue Wins:</b> <b style={{color:'blue'}}>{this.state.pathStats.wins.blue}</b>
+          <b>Blue Min Path:</b> <b style={{color:'blue'}}>{this.state.pathStats.wins.blue}</b>
         </div>
         <div id='ties'>
           <b>Ties:</b> <b style={{color:'purple'}}>{this.state.pathStats.wins.tie}</b>
