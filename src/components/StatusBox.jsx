@@ -146,7 +146,7 @@ export default class StatusBox extends React.Component{
         {path:mState.paths[color]}
       )
 
-      for(let i=0; i<thisState.path.length; i++){
+      /*for(let i=0; i<thisState.path.length; i++){
         let randomNum = Math.floor(Math.random()*1000)
         let faultRange = 500
         if(randomNum < faultRange && i > 0 && i < thisState.path.length && !thisState.path[i].ackFrame && !thisState.path[i].errorPath && !thisState.path[i-1].ackFrame && !thisState.path[i-1].errorPath){
@@ -183,6 +183,58 @@ export default class StatusBox extends React.Component{
               errorPath: path.errorPath ? true : false
             }
           )
+      }).reverse()*/
+      let errorAdded = false
+      for(let i=0; i<thisState.path.length; i++){
+        let randomNum = Math.floor(Math.random()*1000)
+        let faultRange = 500
+        if(!errorAdded && randomNum < faultRange && i > 0 && i < thisState.path.length){
+          console.log('packet DROPPED')
+          let errorPath = []
+          for(let j=i; j>=0; j--){
+            errorPath.push(
+              {
+                from: thisState.path[j].to,
+                to: thisState.path[j].from,
+                weight: thisState.path[j].weight,
+                ackFrame: true,
+                errorPath: true,
+                droppedOnFrame: j == i ? true : false
+              }
+            )
+          }
+
+          let returnPath = thisState.path.slice(0,i+1).map((path,i) => {
+            return (
+              {
+                from: path.from,
+                to: path.to,
+                weight: path.weight,
+                repeatFrame: true,
+                errorPath: true,
+                rootNodeResend: i == 0 ? true : false
+              }
+            )
+          })
+          thisState.path = thisState.path.slice(0,i+1)
+                                         .concat(errorPath)
+                                         .concat(returnPath)
+                                         .concat(thisState.path.slice(i+1))
+        errorAdded = true
+        }
+      }
+
+      let revPath = thisState.path.slice().map(path => {
+          return(
+            {
+              from: path.to,
+              to: path.from,
+              hostAckFrame: true,
+              weight: path.weight,
+              returningPath: true,
+              errorPath: path.errorPath ? true : false
+            }
+          )
       }).reverse()
 
       revPath = revPath.slice().filter(path => !path.errorPath)
@@ -202,16 +254,14 @@ export default class StatusBox extends React.Component{
           ding.id = 'ding'
           ding.style = `transform: translate(${(leavingNode.clientWidth/2)-10}px,-${leavingNode.clientHeight}px); color: yellow;`
           if(thisState.path[i].ackFrame){
-            ding.innerHTML = 'CRC Failed: Sending ACK'
+            if(thisState.path[i].droppedOnFrame){
+              ding.innerHTML = 'CRC Failed: Packet Dropped'
+            }
             leavingNode.appendChild(ding)
             setTimeout(() => {
             ding.style = `opacity: 0; transform: translate(${(leavingNode.clientWidth/2)-10}px,-${leavingNode.clientHeight+15}px); color: yellow;`
           },weightScale*2000)
-            thisMessage.style.visibility = 'visibile'
-            thisMessage.style.background = 'yellow'
-            thisMessage.style.boxShadow = `0 0 10px 3px ${color}`
-            thisMessage.style.width = '19px'
-            thisMessage.style.height = '19px'
+            thisMessage.style.visibility = 'hidden'
           } else if(thisState.path[i].hostAckFrame && thisState.path[i].from == 'host1'){
             ding.innerHTML = `Host 0 <b style="color:${color};">${color}</b> Message Received: Sending ACK`
             ding.style.color = 'green'
@@ -231,7 +281,9 @@ export default class StatusBox extends React.Component{
             thisMessage.style.width = '19px'
             thisMessage.style.height = '19px'
           } else if(thisState.path[i].repeatFrame){
-            ding.innerHTML = `Retransmitting ${color} message`
+            if(thisState.path[i].rootNodeResend){
+              ding.innerHTML = `TIMEOUT: Retransmitting ${color} message`
+            }
             ding.style.color = `${color}`
             leavingNode.appendChild(ding)
             setTimeout(() => {
