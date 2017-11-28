@@ -4,9 +4,6 @@ const NetReveal = (props) => {
   return(
     <div className='layer-reveal-content-wrap'>
     <div className='layer-reveal-content-header'>Network Layer</div>
-    <div className='layer-reveal-content-text'>
-      <p>The netowrk layer is a cool guy and doesn't afraid of anything</p>
-    </div>
     <div className='layer-reveal-content-widget'>
       <div className='data-packet-widget'>
         <div className='ip-datagram'>

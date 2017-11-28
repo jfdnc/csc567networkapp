@@ -4,9 +4,6 @@ const TransReveal = (props) => {
   return(
     <div className='layer-reveal-content-wrap'>
     <div className='layer-reveal-content-header'>Transport Layer</div>
-    <div className='layer-reveal-content-text'>
-      <p>The transport layer is a cool guy and doesn't afraid of anything</p>
-    </div>
     <div className='layer-reveal-content-widget'>
       <div className='data-packet-widget'>
         <div className='tcp-header'>
