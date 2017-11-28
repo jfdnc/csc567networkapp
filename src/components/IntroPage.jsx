@@ -1,6 +1,11 @@
 import React from 'react'
 import Fade from './Fade'
 import { Collection, CollectionItem, Tabs, Tab } from 'react-materialize'
+import intropage from '../images/intropage.png'
+import a1page from '../images/a1page.png'
+import a2page1 from '../images/a2page1.png'
+import a2page2 from '../images/a2page2.png'
+import a3page from '../images/a3page.png'
 
 export default class IntroPage extends React.Component{
   constructor(props){
@@ -34,11 +39,21 @@ export default class IntroPage extends React.Component{
               <Tabs>
                 <Tab title='Project'>
                 <br/>
-                
+                <img src={intropage} style={{width: '700px',height: '800px'}}/>
                 </Tab>
-                <Tab title='Assignment 1'>Assignment 1</Tab>
-                <Tab title='Assignment 2'>Assignment 2</Tab>
-                <Tab title='Assignment 3'>Assignment 3</Tab>
+                <Tab title='Assignment 1'>
+                <br/>
+                <img src={a1page} style={{width: '700px',height: '800px'}}/>
+                </Tab>
+                <Tab title='Assignment 2'>
+                <br/>
+                <img src={a2page1} style={{width: '700px',height: '800px'}}/>
+                <img src={a2page2} style={{width: '700px',height: '800px'}}/>
+                </Tab>
+                <Tab title='Assignment 3'>
+                <br/>
+                <img src={a3page} style={{width: '700px',height: '800px'}}/>
+                </Tab>
               </Tabs>
             </div>
             <div id='code-page' className={`${this.state.activePage == 'code' ? 'active' : 'inactive'}`}>
